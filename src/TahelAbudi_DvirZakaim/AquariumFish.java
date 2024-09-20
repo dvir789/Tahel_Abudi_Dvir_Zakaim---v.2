@@ -2,7 +2,7 @@ package TahelAbudi_DvirZakaim;
 
 import java.util.Arrays;
 
-public class AquariumFish {
+public class AquariumFish extends Animal {
 
     public static final String[] colorsArr = {"BLACK", "WHITE", "GREEN", "ORANGE", "BLUE", "YELLOW", "BROWN", "GOLD", "RED", "CYAN"};
     public static final String[] patternArr = {"DOTS", "STRIPES", "SPOTS", "PLAIN"};
