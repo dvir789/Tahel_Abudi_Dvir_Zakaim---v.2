@@ -13,12 +13,13 @@ public class main {
             "Exit Program",
             "Show Zoo",
             "Add Penguin",
-            "Add Lion",
+            "Add Predator",
             "Add Aquarium fish",
             "Show Penguins",
-            "Show Lions",
+            "Show Predators",
             "Show Aquarium fish",
-            "Feed animals"
+            "Feed animals",
+            "Listen to animals"
     };
 
     public static void main(String[] args) {
@@ -41,10 +42,14 @@ public class main {
                 case 6 -> showLions(manager);
                 case 7 -> showAquariumFish(manager);
                 case 8 -> feedAnimals(manager);
+                case 9 -> listenAnimals(manager);
                 default -> System.out.println("invalid value");
             }
 
         } while (userChoosen != 0);
+    }
+
+    private static void listenAnimals(Manager manager) {
     }
 
     private static int showMenu() {
