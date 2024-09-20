@@ -2,19 +2,14 @@ package TahelAbudi_DvirZakaim;
 
 import java.util.Objects;
 
-public class Lion {
+public class Lion extends Predator{
 
-    private String name;
-    private int age;
-    private float weight;
-    private String gender;
+    private static final String type = "Lion";
 
     //constructor
     public Lion(String name, int age, float weight, String gender) {
-        setName(name);
-        setAge(age);
-        setWeight(weight);
-        setGender(gender);
+        super(name, age, weight, gender);
+        super.type = type;
     }
 
     public boolean setName(String name) {
@@ -69,7 +64,8 @@ public class Lion {
         return Objects.equals(gender, "male") || Objects.equals(gender, "female");
     }
 
-    public float mealCalculateLion() {
+    @Override
+    public float mealCalculate() {
         double factor = (Objects.equals(gender, "male") ? 0.02 : 0.03);
         double meal = Math.floor(factor * age * weight);
 
@@ -77,10 +73,8 @@ public class Lion {
     }
 
     @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Lion: ").append(name).append(" at age: ").append(age).append(" with weight: ")
-                .append(weight).append(" gender: ").append(gender);
-        return sb.toString();
+    public String makeNoise() {
+        return "ROAR";
     }
+
 }

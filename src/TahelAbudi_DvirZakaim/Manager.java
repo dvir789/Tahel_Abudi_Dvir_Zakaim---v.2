@@ -196,7 +196,7 @@ public class Manager {
             if (lion == null){
                 break;
             }
-            lionsMeals += lion.mealCalculateLion();
+            lionsMeals += lion.mealCalculate();
         }
 
         for (AquariumFish fish : aquariumFishPack) {
