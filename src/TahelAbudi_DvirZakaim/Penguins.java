@@ -1,7 +1,7 @@
 package TahelAbudi_DvirZakaim;
 
 
-public class Penguins {
+public class Penguins extends Animal {
 
     private int age;
     private float height;
@@ -54,6 +54,11 @@ public class Penguins {
 
     public static boolean isValidName(String name) {
         return (name != null && name.trim().length() >= 2);
+    }
+
+    @Override
+    public String makeNoise() {
+        return "squack";
     }
 
     @Override

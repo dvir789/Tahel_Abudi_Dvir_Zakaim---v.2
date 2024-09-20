@@ -5,5 +5,7 @@ public class Animal {
 
     public void feed() { }
 
-    public void makeNoise() { }
+    public String makeNoise() {
+        return "";
+    }
 }
