@@ -5,14 +5,18 @@ import java.util.Arrays;
 public class ClownFish extends AquariumFish {
 
     private final String[] availableColors = {"BLACK", "WHITE", "ORANGE"};
+    private final String validPattern = "STRIPES";
+    public final String type = "ClownFish";
+    public final float Meal = 2;
 
-    public ClownFish(float length, int age, String[] colors, String pattern) throws Exception {
-        super(length, age, colors, pattern);
-        validateColor();
+
+    public ClownFish(int age, float length, String[] colors, String pattern) {
+        super(age, length, colors, pattern);
+        super.type = type;
     }
 
 
-    private boolean isColorValid(String[] colors) {
+    private boolean isValidColor(String[] colors) {
         for (String color : colors) {
             if (!Arrays.toString(availableColors).contains(color)) {
                 return false;
@@ -23,12 +27,17 @@ public class ClownFish extends AquariumFish {
 
 
     private void validateColor() throws Exception {
-        if (!isColorValid(colors)) {
+        if (!isValidColor(colors)) {
             throw new Exception("Color not valid");
         }
     }
 
 
-// pattern --> stripes
-// colors --> black/orange/white
+
+    @Override
+    public float MealCalculator() {
+        return Meal;
+    }
+
+
 }

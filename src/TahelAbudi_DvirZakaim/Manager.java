@@ -16,7 +16,7 @@ public class Manager {
     private Lion[] lionsPack;
     private int lionCount;
 
-    private AquariumFish[] aquariumFishPack;
+    private OrnamentalFishes[] ornamentalFishesPack;
     private int aquariumFishCount;
 
     private int numOfUniqueColors;
@@ -117,13 +117,13 @@ public class Manager {
     // ========== AQUARIUM FISH ==========
 
     private void setAquariumFish() {
-        aquariumFishPack = new AquariumFish[1];
+        ornamentalFishesPack = new OrnamentalFishes[1];
         addRandomFish(10);
     }
 
     private void addRandomFish(int amount) {
         Random r = new Random();
-        int age, patternSize = AquariumFish.patternArr.length, colorSize = AquariumFish.colorsArr.length;
+        int age, patternSize = OrnamentalFishes.patternArr.length, colorSize = OrnamentalFishes.colorsArr.length;
         String[] fishColor;
         String fishPattern;
         float length;
@@ -133,23 +133,23 @@ public class Manager {
             age = r.nextInt(15) + 1;
             length = r.nextFloat(10) + 1;
             colorRandomNumber = r.nextInt(colorSize);
-            fishColor = new String[]{AquariumFish.colorsArr[colorRandomNumber]};
+            fishColor = new String[]{OrnamentalFishes.colorsArr[colorRandomNumber]};
             patternRandomNumber = r.nextInt(patternSize);
-            fishPattern = AquariumFish.patternArr[patternRandomNumber];
+            fishPattern = OrnamentalFishes.patternArr[patternRandomNumber];
             createFish(age, fishColor, length, fishPattern);
         }
     }
 
     public void createFish(int age, String[] userColors, float length, String userPattern) {
-        AquariumFish fish = new AquariumFish(length, age, userColors, userPattern);
+        OrnamentalFishes fish = new OrnamentalFishes(age, length, userColors, userPattern);
         addFish(fish);
     }
 
-    private void addFish(AquariumFish fish) {
-        if (aquariumFishCount >= aquariumFishPack.length) {
-            aquariumFishPack = Arrays.copyOf(aquariumFishPack, aquariumFishPack.length * 2);
+    private void addFish(OrnamentalFishes fish) {
+        if (aquariumFishCount >= ornamentalFishesPack.length) {
+            ornamentalFishesPack = Arrays.copyOf(ornamentalFishesPack, ornamentalFishesPack.length * 2);
         }
-        aquariumFishPack[aquariumFishCount++] = fish;
+        ornamentalFishesPack[aquariumFishCount++] = fish;
     }
 
     public String getAquariumFishList() {
@@ -157,14 +157,14 @@ public class Manager {
         String[] uniqueColors = new String[1];
 
         for (int i = 0; i < aquariumFishCount - 1; i++) {
-            sb.append(aquariumFishPack[i].toString());
+            sb.append(ornamentalFishesPack[i].toString());
             sb.append(",\n");
         }
-        sb.append(aquariumFishPack[aquariumFishCount - 1].toString());
+        sb.append(ornamentalFishesPack[aquariumFishCount - 1].toString());
         sb.append("\nThere are ").append(aquariumFishCount).append(" fishes in the aquarium\n");
 
         for (int i = 0; i < aquariumFishCount; i++) {
-            String[] fishColors = aquariumFishPack[i].getColors();
+            String[] fishColors = ornamentalFishesPack[i].getColors();
             for (String color : fishColors) {
                 uniqueColors = isUniqueColor(uniqueColors, color);
             }
@@ -199,11 +199,11 @@ public class Manager {
             lionsMeals += lion.mealCalculate();
         }
 
-        for (AquariumFish fish : aquariumFishPack) {
+        for (OrnamentalFishes fish : ornamentalFishesPack) {
             if (fish == null) {
                 break;
             }
-            fishMeals += fish.mealCalculateFish();
+            fishMeals += fish.MealCalculator();
         }
 
         sb.append("The lions ate: ").append(lionsMeals).append(" kg of meat\n");
@@ -226,23 +226,23 @@ public class Manager {
     //---------- FISH INPUT VALIDATION ----------
 
     public boolean isValidFishAge(int age) {
-        return AquariumFish.isValidAge(age);
+        return OrnamentalFishes.isValidAge(age);
     }
 
     public boolean isValidFishColor(String userColor) {
-        return AquariumFish.isValidColor(userColor);
+        return OrnamentalFishes.isValidColor(userColor);
     }
 
     public boolean isValidFishLength(float length) {
-        return AquariumFish.isValidLength(length);
+        return OrnamentalFishes.isValidLength(length);
     }
 
     public boolean isValidFishPattern(String userPattern) {
-        return AquariumFish.isValidPattern(userPattern);
+        return OrnamentalFishes.isValidPattern(userPattern);
     }
 
     public boolean canAddFishColor(int numOfUserColors) {
-        return numOfUserColors < AquariumFish.colorsArr.length;
+        return numOfUserColors < OrnamentalFishes.colorsArr.length;
     }
 
     //---------- LION INPUT VALIDATION ----------
