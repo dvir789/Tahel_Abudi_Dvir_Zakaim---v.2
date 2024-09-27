@@ -1,5 +1,9 @@
 package TahelAbudi_DvirZakaim;
 
+import TahelAbudi_DvirZakaim.exceptions.AgeException;
+import TahelAbudi_DvirZakaim.exceptions.GeneralException;
+import TahelAbudi_DvirZakaim.exceptions.NameException;
+
 import java.util.Arrays;
 import java.util.Random;
 
@@ -22,7 +26,7 @@ public class Manager {
     private int numOfUniqueColors;
 
     //constructor
-    public Manager(String name, String city, String street, String number) {
+    public Manager(String name, String city, String street, String number) throws GeneralException {
         this.name = name;
         this.city = city;
         this.street = street;
@@ -35,7 +39,7 @@ public class Manager {
 
     // ========== PENGUIN ==========
 
-    private void setPenguin() {
+    private void setPenguin() throws GeneralException {
         penguinsPack = new Penguins[1];
         penguinsCount = 0;
 
@@ -44,7 +48,7 @@ public class Manager {
         createPenguin(11, 175, "Simon", false);
     }
 
-    public void createPenguin(int age, float height, String name, boolean leader) {
+    public void createPenguin(int age, float height, String name, boolean leader) throws GeneralException {
         Penguins penguin = new Penguins(age, height, name, leader);
         addPenguin(penguin);
     }
@@ -251,9 +255,9 @@ public class Manager {
         return Lion.isValidName(name);
     }
 
-    public boolean isValidLionAge(int age) {
-        return Lion.isValidLionAge(age);
-    }
+//    public boolean isValidLionAge(int age) throws AgeException {
+//        return main.isValidAge(age);
+//    }
 
     public boolean isValidLionWeight(float weight) {
         return Lion.isValidLionWeight(weight);
@@ -265,13 +269,10 @@ public class Manager {
 
     //---------- penguin input validation ----------
 
-    public boolean isValidPenguinName(String name) {
-        return Penguins.isValidName(name);
-    }
 
-    public boolean isValidPenguinAge(int age) {
-        return Penguins.isValidPenguinAge(age);
-    }
+//    public boolean isValidPenguinAge(int age) {
+//        return main.isValidAge(age);
+//    }
 
     public boolean isValidPenguinHeight(float height, boolean leader) {
         return Penguins.isValidPenguinHeight(height, leader);

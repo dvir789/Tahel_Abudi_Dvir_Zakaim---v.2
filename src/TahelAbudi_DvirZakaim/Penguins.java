@@ -1,6 +1,10 @@
 package TahelAbudi_DvirZakaim;
 
 
+import TahelAbudi_DvirZakaim.exceptions.AgeException;
+import TahelAbudi_DvirZakaim.exceptions.GeneralException;
+import TahelAbudi_DvirZakaim.exceptions.NameException;
+
 public class Penguins extends Animal {
 
     private int age;
@@ -9,32 +13,18 @@ public class Penguins extends Animal {
     public static final int leaderHeight = 200;
 
     //constructor
-    public Penguins(int age, float height, String name, boolean leader) {
+    public Penguins(int age, float height, String name, boolean leader) throws GeneralException {
         setAge(age);
         setHeight(height, leader);
         setName(name);
     }
 
-    public boolean setAge(int age) {
-        if (!isValidPenguinAge(age)) {
-            return false;
-        }
-
+    public void setAge(int age) {
         this.age = age;
-        return true;
     }
 
-    public static boolean isValidPenguinAge(int age) {
-        return age > 0;
-    }
-
-    public boolean setName(String name) {
-        if (!isValidName(name)) {
-            return false;
-        }
-
+    public void setName(String name) throws NameException {
         this.name = name;
-        return true;
     }
 
     public boolean setHeight(float height, boolean leader) {
@@ -51,10 +41,6 @@ public class Penguins extends Animal {
     }
 
     public float getHeight() { return this.height; }
-
-    public static boolean isValidName(String name) {
-        return (name != null && name.trim().length() >= 2);
-    }
 
     @Override
     public String makeNoise() {
