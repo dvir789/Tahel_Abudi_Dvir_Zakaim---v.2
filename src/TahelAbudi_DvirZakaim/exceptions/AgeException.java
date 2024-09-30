@@ -1,7 +1,7 @@
 package TahelAbudi_DvirZakaim.exceptions;
 
 public class AgeException extends GeneralException {
-    private static final String MESSAGE = "Age is invalid, please enter an age higher then 0: ";
+    private static final String MESSAGE = "wrong input, enter correct age: ";
 
     public AgeException() {
     super(MESSAGE);

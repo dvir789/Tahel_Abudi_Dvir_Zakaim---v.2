@@ -1,6 +1,6 @@
 package TahelAbudi_DvirZakaim;
 
-public class Predator extends Animal {
+public abstract class Predator extends Animal {
 
     protected String name;
     protected int age;
@@ -15,9 +15,7 @@ public class Predator extends Animal {
         this.gender = gender;
     }
 
-    public float mealCalculate() {
-        return 0;
-    }
+    public abstract float mealCalculate();
 
     @Override
     public String toString() {

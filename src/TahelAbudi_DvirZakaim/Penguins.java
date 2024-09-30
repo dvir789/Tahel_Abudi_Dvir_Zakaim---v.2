@@ -1,60 +1,54 @@
 package TahelAbudi_DvirZakaim;
 
 
+import TahelAbudi_DvirZakaim.exceptions.AgeException;
+import TahelAbudi_DvirZakaim.exceptions.GeneralException;
+import TahelAbudi_DvirZakaim.exceptions.NameException;
+import TahelAbudi_DvirZakaim.exceptions.PenguinHeightException;
+
 public class Penguins extends Animal {
 
     private int age;
     private float height;
     private String name;
-    public static final int leaderHeight = 200;
+    public final static int leaderHeight = 200;
 
     //constructor
-    public Penguins(int age, float height, String name, boolean leader) {
+    public Penguins(int age, float height, String name, boolean leader) throws GeneralException {
         setAge(age);
-        setHeight(height, leader);
+        setHeight(height);
         setName(name);
     }
 
-    public boolean setAge(int age) {
-        if (!isValidPenguinAge(age)) {
-            return false;
+    public void setAge(int age) throws AgeException {
+        if (!main.isValidAge(age)) {
+            throw new AgeException();
         }
-
         this.age = age;
-        return true;
     }
 
-    public static boolean isValidPenguinAge(int age) {
-        return age > 0;
-    }
-
-    public boolean setName(String name) {
-        if (!isValidName(name)) {
-            return false;
+    public void setName(String name) throws NameException {
+        if (!main.isValidName(name)) {
+            throw new NameException();
         }
-
         this.name = name;
-        return true;
     }
 
-    public boolean setHeight(float height, boolean leader) {
-        if (!isValidPenguinHeight(height, leader)) {
-            return false;
+    public void setHeight(float height) throws PenguinHeightException {
+        if (!isValidPenguinHeight(height)) {
+            throw  new PenguinHeightException();
         }
-
         this.height = height;
-        return true;
     }
 
-    public static boolean isValidPenguinHeight(float height, boolean leader) {
-        return !(height <= 0 || (!leader && height >= leaderHeight));
+    public boolean isValidPenguinHeight(float height) throws PenguinHeightException {
+        if (height <= 0 || height >= leaderHeight) {
+            throw new PenguinHeightException();
+        }
+        return true;
     }
 
     public float getHeight() { return this.height; }
-
-    public static boolean isValidName(String name) {
-        return (name != null && name.trim().length() >= 2);
-    }
 
     @Override
     public String makeNoise() {
