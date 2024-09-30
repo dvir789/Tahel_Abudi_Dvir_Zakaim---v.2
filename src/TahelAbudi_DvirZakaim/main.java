@@ -32,11 +32,11 @@ public class main {
         int userChoosen;
         do {
             userChoosen = showMenu();
-            switch (userChoosen){
+            switch (userChoosen) {
                 case 0 -> exitProgram();
                 case 1 -> showZoo(manager);
                 case 2 -> addPenguin(manager);
-                case 3 -> addLion(manager);
+                case 3 -> addPredator(manager);
                 case 4 -> addAquariumFish(manager);
                 case 5 -> showPenguins(manager);
                 case 6 -> showLions(manager);
@@ -91,7 +91,46 @@ public class main {
         manager.createPenguin(age, height, name, false);
     }
 
+    private static void addPredator(Manager manager) {
+
+        int userChoice;
+        do {
+            userChoice = readInt("enter 1 for lion, 2 for tiger, 3 to return to the menu: ");
+            switch (userChoice) {
+                case 1 -> addLion(manager);
+                case 2 -> addTiger(manager);
+                case 3 -> { }
+                default -> System.out.println("invalid value: ");
+            }
+        } while (userChoice != 3);
+    }
+
     private static void addLion(Manager manager) {
+
+        String name = readString("Enter lion's name: ");
+        while (!manager.isValidLionName(name)) {
+            name = readString("wrong input,please enter a valid name (at least 2 characters): ");
+        }
+
+        int age = readInt("Enter lion's age: ");
+        while (!manager.isValidLionAge(age)) {
+            age = readInt("wrong input, enter correct age: ");
+        }
+
+        float weight = readFloat("Enter lion's weight: ");
+        while (!manager.isValidLionWeight(weight)) {
+            weight = readFloat("wrong input, enter correct weight: ");
+        }
+
+        String gender = readString("is lion male? (male/female): ");
+        while (!manager.isValidLionGender(gender)) {
+            gender = readString("wrong input, enter correct gender: ");
+        }
+
+        manager.createLion(name, age, weight, gender);
+    }
+
+    private static void addTiger(Manager manager) {
 
         String name = readString("Enter lion's name: ");
         while (!manager.isValidLionName(name)) {
