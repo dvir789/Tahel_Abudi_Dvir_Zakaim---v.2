@@ -5,11 +5,16 @@ import java.util.Arrays;
 public class GoldFish extends AquariumFish {
 
     private final String[] availableColors = {"BLACK", "YELLOW", "GOLD", "ORANGE"};
+    private final String validPattern = "PLAIN";
+    public final String type = "GoldFish";
+    public final float Meal = 1;
 
-    public GoldFish(float length, int age, String[] colors, String pattern) throws Exception {
-        super(length, age, colors, pattern);
-        validateColor();
+
+    public GoldFish(int age, float length, String[] colors, String pattern) {
+        super(age, length, colors, pattern);
+        super.type = type;
     }
+
 
     private boolean isColorValid(String[] colors) {
         for (String color : colors) {
@@ -26,6 +31,10 @@ public class GoldFish extends AquariumFish {
         }
     }
 
-// pattern --> plain
-// colors --> black/gold/orange/yellow
+    @Override
+    public float MealCalculator() {
+        return Meal;
+    }
+
+
 }

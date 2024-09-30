@@ -129,9 +129,9 @@ public class main {
         }
 
         String userColor = readString("choose fish's color from the list: \n"
-                + Arrays.toString(AquariumFish.colorsArr));
+                + Arrays.toString(OrnamentalFishes.colorsArr));
 
-        String[] userColors = new String[AquariumFish.colorsArr.length];
+        String[] userColors = new String[OrnamentalFishes.colorsArr.length];
         int numOfUserColors = 0;
         while (!manager.isValidFishColor(userColor)) {
             userColor = readString("wrong color, please enter valid color from this list above: ");
@@ -148,7 +148,7 @@ public class main {
             answer = readString("do you want another color? (y/n): ");
         }
 
-        String userPattern = readString("Enter fish's pattern: \n" + Arrays.toString(AquariumFish.patternArr));
+        String userPattern = readString("Enter fish's pattern: \n" + Arrays.toString(OrnamentalFishes.patternArr));
         while (!manager.isValidFishPattern(userPattern)) {
             userPattern = readString("invalid pattern, please choose from the list above ");
         }
