@@ -15,7 +15,6 @@ public class ClownFish extends AquariumFish {
         super.type = type;
     }
 
-
     private boolean isValidColor(String[] colors) {
         for (String color : colors) {
             if (!Arrays.toString(availableColors).contains(color)) {
@@ -25,18 +24,20 @@ public class ClownFish extends AquariumFish {
         return true;
     }
 
-
     private void validateColor() throws Exception {
         if (!isValidColor(colors)) {
             throw new Exception("Color not valid");
         }
     }
 
-
-
     @Override
     public float MealCalculator() {
         return Meal;
+    }
+
+    @Override
+    public String makeNoise() {
+        return "blob";
     }
 
 

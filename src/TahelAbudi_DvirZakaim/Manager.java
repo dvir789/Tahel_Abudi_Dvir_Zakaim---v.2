@@ -18,6 +18,9 @@ public class Manager {
     private Lion[] lionsPack;
     private int lionCount;
 
+    private Tiger[] tigersPack;
+    private int tigersCount;
+
     private OrnamentalFishes[] ornamentalFishesPack;
     private int aquariumFishCount;
 
@@ -31,6 +34,7 @@ public class Manager {
         this. number = number;
 
         setLion();
+        setTiger();
         setPenguin();
         setAquariumFish();
     }
@@ -120,6 +124,42 @@ public class Manager {
         return sb1.toString();
     }
 
+    // ========== TIGER ==========
+
+    private void setTiger() {
+        tigersPack = new Tiger[1];
+        tigersCount = 0;
+
+        createTiger("Mufasa", 26, 50, "male");
+        createTiger("Simba", 15, 30, "male");
+        createTiger("Nala", 15, 25, "female");
+        createTiger("Sarabi", 26, 40, "female");
+    }
+
+    public void createTiger(String name, int age, float weight, String gender) {
+        Tiger tiger = new Tiger(name, age, weight, gender);
+        addTiger(tiger);
+    }
+
+    private void addTiger(Tiger tiger) {
+        if (tigersCount >= tigersPack.length) {
+            tigersPack = Arrays.copyOf(tigersPack, tigersPack.length * 2);
+        }
+        tigersPack[tigersCount++] = tiger;
+    }
+
+    public String getTigerList() {
+        StringBuilder sb1 = new StringBuilder();
+
+        for (int i = 0; i < tigersCount - 1; i++) {
+            sb1.append(tigersPack[i].toString());
+            sb1.append(",\n");
+        }
+        sb1.append(tigersPack[tigersCount - 1].toString());
+
+        return sb1.toString();
+    }
+
     // ========== AQUARIUM FISH ==========
 
     private void setAquariumFish() {
@@ -193,8 +233,6 @@ public class Manager {
 
         }
 
-
-
         uniqueColors[numOfUniqueColors++] = color;
         return uniqueColors;
     }
@@ -258,14 +296,6 @@ public class Manager {
     }
 
     //---------- LION INPUT VALIDATION ----------
-
-//    public boolean isValidLionName(String name) {
-//        return Lion.isValidName(name);
-//    }
-//
-//    public boolean isValidLionAge(int age) {
-//        return Lion.isValidLionAge(age);
-//    }
 
     public void isValidPredatorWeight(float weight) throws PredatorWeightException {
         Lion.isValidLionWeight(weight);
