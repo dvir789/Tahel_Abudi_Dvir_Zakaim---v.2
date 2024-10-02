@@ -9,17 +9,17 @@ public class OrnamentalFishes extends AquariumFish {
     public String[] colors;
     public int numOfColors;
     public String pattern;
-    public final String type = "Ornamental fish";
+    public final String fishType = "Ornamental fish";
     public final static int Meal = 3;
+
 
 
     public OrnamentalFishes(int age, float length, String[] colors, String pattern) {
         super(age, length, colors, pattern);
-        super.type = type;
+        this.type = fishType;
     }
 
 
-    //constructor
     public boolean setAge(int age) {
         if (age <= 0) {
             return false;
@@ -66,9 +66,6 @@ public class OrnamentalFishes extends AquariumFish {
         colors[numOfColors++] = userColor.toUpperCase();
     }
 
-    public String[] getColors() {
-        return Arrays.copyOf(colors, numOfColors);
-    }
 
     public static boolean isValidColor(String fishColor) {
         fishColor = fishColor.toLowerCase();
@@ -97,5 +94,4 @@ public class OrnamentalFishes extends AquariumFish {
                 .append(Arrays.toString(getColors())).append(", pattern: ").append(pattern);
         return sb.toString();
     }
-
 }

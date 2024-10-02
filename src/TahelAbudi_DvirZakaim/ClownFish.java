@@ -6,14 +6,15 @@ public class ClownFish extends AquariumFish {
 
     private final String[] availableColors = {"BLACK", "WHITE", "ORANGE"};
     private final String validPattern = "STRIPES";
-    public final String type = "ClownFish";
-    public final float Meal = 2;
 
+    public final String fishType = "ClownFish";
+    public final float Meal = 2;
 
     public ClownFish(int age, float length, String[] colors, String pattern) {
         super(age, length, colors, pattern);
-        super.type = type;
+        this.type = fishType;
     }
+
 
     private boolean isValidColor(String[] colors) {
         for (String color : colors) {
@@ -39,6 +40,6 @@ public class ClownFish extends AquariumFish {
     public String makeNoise() {
         return "blob";
     }
-
+    
 
 }

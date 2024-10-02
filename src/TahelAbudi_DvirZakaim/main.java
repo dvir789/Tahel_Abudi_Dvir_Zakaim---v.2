@@ -61,10 +61,7 @@ public class main {
         for (int i = 0; i < MENU.length; i++) {
             System.out.println(i + ") " + MENU[i]);
         }
-        System.out.println("Enter your choice: ");
-        int choice = s.nextInt();
-        s.nextLine();
-        return choice;
+        return readInt("Enter your choice: ");
     }
 
     private static void exitProgram() {
@@ -163,6 +160,11 @@ public class main {
 
     private static void addAquariumFish(Manager manager) {
 
+        String type = readString("Choose fish's type (Gold Fish/ Clown Fish/ Ornamental Fish): ");
+        while (!manager.isValidFishType(type)) {
+            type = readString("wrong input, enter correct type: ");
+        }
+
         int age = readInt("Enter fish's age: ");
         while (!manager.isValidFishAge(age)) {
             age = readInt("wrong input, enter correct age: ");
@@ -199,7 +201,7 @@ public class main {
         }
 
         userColors = Arrays.copyOf(userColors, numOfUserColors);
-        manager.createFish(age, userColors, length, userPattern);
+        manager.createFish(age, length, type, userColors, userPattern);
     }
 
     private static void showPenguins(Manager manager) { System.out.println(manager.getPenguinList()); }

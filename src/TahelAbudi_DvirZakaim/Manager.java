@@ -3,6 +3,7 @@ package TahelAbudi_DvirZakaim;
 import TahelAbudi_DvirZakaim.exceptions.*;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Random;
 
 public class Manager {
@@ -21,8 +22,9 @@ public class Manager {
     private Tiger[] tigersPack;
     private int tigersCount;
 
-    private OrnamentalFishes[] ornamentalFishesPack;
-    private int aquariumFishCount;
+    private AquariumFish[] AquariumFishPack;
+    private int AquariumFishCount;
+
 
     private int numOfUniqueColors;
 
@@ -163,17 +165,18 @@ public class Manager {
     // ========== AQUARIUM FISH ==========
 
     private void setAquariumFish() {
-        ornamentalFishesPack = new OrnamentalFishes[1];
+        AquariumFishPack = new AquariumFish[1];
         addRandomFish(10);
     }
 
     private void addRandomFish(int amount) {
         Random r = new Random();
-        int age, patternSize = OrnamentalFishes.patternArr.length, colorSize = OrnamentalFishes.colorsArr.length;
+        int age, patternSize = OrnamentalFishes.patternArr.length, colorSize = OrnamentalFishes.colorsArr.length, typeSize = AquariumFish.Type.length;
         String[] fishColor;
         String fishPattern;
+        String fishType;
         float length;
-        int colorRandomNumber, patternRandomNumber;
+        int colorRandomNumber, patternRandomNumber, typeRandomNumber;
 
         for (int i = 0; i < amount; i++) {
             age = r.nextInt(15) + 1;
@@ -182,20 +185,29 @@ public class Manager {
             fishColor = new String[]{OrnamentalFishes.colorsArr[colorRandomNumber]};
             patternRandomNumber = r.nextInt(patternSize);
             fishPattern = OrnamentalFishes.patternArr[patternRandomNumber];
-            createFish(age, fishColor, length, fishPattern);
+            typeRandomNumber = r.nextInt(typeSize);
+            fishType = AquariumFish.Type[typeRandomNumber];
+            createFish(age, length, fishType, fishColor, fishPattern);
         }
     }
 
-    public void createFish(int age, String[] userColors, float length, String userPattern) {
-        OrnamentalFishes fish = new OrnamentalFishes(age, length, userColors, userPattern);
-        addFish(fish);
+    public void createFish(int age, float length, String type, String[] colors, String pattern) {
+        AquariumFish fish = switch (type) {
+            case "Gold Fish" -> new GoldFish(age, length, colors, pattern);
+            case "Clown Fish" -> new ClownFish(age, length, colors, pattern);
+            case "Ornamental Fish" -> new OrnamentalFishes(age, length, colors, pattern);
+            default -> null;
+        };
+        if (fish != null) {
+            addFish(fish);
+        }
     }
 
-    private void addFish(OrnamentalFishes fish) {
-        if (aquariumFishCount >= ornamentalFishesPack.length) {
-            ornamentalFishesPack = Arrays.copyOf(ornamentalFishesPack, ornamentalFishesPack.length * 2);
+    private void addFish(AquariumFish fish) {
+        if (AquariumFishCount >= AquariumFishPack.length) {
+            AquariumFishPack = Arrays.copyOf(AquariumFishPack, AquariumFishPack.length * 2);
         }
-        ornamentalFishesPack[aquariumFishCount++] = fish;
+        AquariumFishPack[AquariumFishCount++] = fish;
     }
 
     public String getAquariumFishList() {
@@ -203,15 +215,15 @@ public class Manager {
         String[] uniqueColors = new String[1];
         numOfUniqueColors = 0;
 
-        for (int i = 0; i < aquariumFishCount - 1; i++) {
-            sb.append(ornamentalFishesPack[i].toString());
+        for (int i = 0; i < AquariumFishCount - 1; i++) {
+            sb.append(AquariumFishPack[i].toString());
             sb.append(",\n");
         }
-        sb.append(ornamentalFishesPack[aquariumFishCount - 1].toString());
-        sb.append("\nThere are ").append(aquariumFishCount).append(" fishes in the aquarium\n");
+        sb.append(AquariumFishPack[AquariumFishCount - 1].toString());
+        sb.append("\nThere are ").append(AquariumFishCount).append(" fishes in the aquarium\n");
 
-        for (int i = 0; i < aquariumFishCount; i++) {
-            String[] fishColors = ornamentalFishesPack[i].getColors();
+        for (int i = 0; i < AquariumFishCount; i++) {
+            String[] fishColors = AquariumFishPack[i].getColors();
             for (String color : fishColors) {
                 uniqueColors = isUniqueColor(uniqueColors, color);
             }
@@ -223,14 +235,24 @@ public class Manager {
         return sb.toString();
     }
 
+    private int getFishNum(String type) {
+        int counter = 0;
+        for (int i = 0; i < AquariumFishCount; i++) {
+            if(Objects.equals(AquariumFishPack[i].getType(), type)) {
+                counter++;
+            }
+        }
+        return counter;
+    }
+
+
     public String[] isUniqueColor(String[] uniqueColors, String color) {
         if (Arrays.toString(uniqueColors).toLowerCase().contains(color.toLowerCase())) {
             return uniqueColors;
         }
 
-        if (numOfUniqueColors >= uniqueColors.length) {
-            uniqueColors = Arrays.copyOf(uniqueColors, uniqueColors.length * 2);     // AKRISH LOOK HERE
-
+        while (numOfUniqueColors >= uniqueColors.length) {
+            uniqueColors = Arrays.copyOf(uniqueColors, uniqueColors.length * 2);
         }
 
         uniqueColors[numOfUniqueColors++] = color;
@@ -249,7 +271,7 @@ public class Manager {
             lionsMeals += lion.mealCalculate();
         }
 
-        for (OrnamentalFishes fish : ornamentalFishesPack) {
+        for (AquariumFish fish : AquariumFishPack) {
             if (fish == null) {
                 break;
             }
@@ -269,7 +291,9 @@ public class Manager {
         sb.append("The zoo address is: ").append(city).append(", ").append(number).append(", ").append(street).append("\n");
         sb.append("Lions: ").append(lionCount).append("\n");
         sb.append("Penguins: ").append(penguinsCount).append("\n");
-        sb.append("AquariumFish: ").append(aquariumFishCount).append("\n");
+        sb.append("Ornamental fishes: ").append(getFishNum("Ornamental Fish")).append("\n");
+        sb.append("Gold fishes: ").append(getFishNum("Gold Fish")).append("\n");
+        sb.append("Clown fishes: ").append(getFishNum("Clown Fish")).append("\n");
         return sb.toString();
     }
 
@@ -293,6 +317,11 @@ public class Manager {
 
     public boolean canAddFishColor(int numOfUserColors) {
         return numOfUserColors < OrnamentalFishes.colorsArr.length;
+
+    }
+
+    public boolean isValidFishType(String userType) {
+        return AquariumFish.isValidType(userType);
     }
 
     //---------- LION INPUT VALIDATION ----------
