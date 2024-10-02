@@ -1,11 +1,9 @@
 package TahelAbudi_DvirZakaim;
 
-public class Animal {
+public abstract class Animal {
 
 
     public void feed() { }
 
-    public String makeNoise() {
-        return "";
-    }
+    public abstract String makeNoise();
 }

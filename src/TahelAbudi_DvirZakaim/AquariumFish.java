@@ -2,7 +2,7 @@ package TahelAbudi_DvirZakaim;
 
 import java.util.Arrays;
 
-public class AquariumFish extends Animal{
+public abstract class AquariumFish extends Animal{
 
     public static final String[] colorsArr = {"BLACK", "WHITE", "GREEN", "ORANGE", "BLUE", "YELLOW", "BROWN", "GOLD", "RED", "CYAN"};
     public static final String[] patternArr = {"DOTS", "STRIPES", "SPOTS", "PLAIN"};
@@ -24,14 +24,10 @@ public class AquariumFish extends Animal{
     }
 
 
-    public float MealCalculator() {
-        return 0;
-    }
+    public abstract float MealCalculator();
 
     @Override
-    public String makeNoise() {
-        return "blob";
-    }
+    public abstract String makeNoise();
 
     @Override
     public String toString() {

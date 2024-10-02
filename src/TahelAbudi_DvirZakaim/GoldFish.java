@@ -36,5 +36,10 @@ public class GoldFish extends AquariumFish {
         return Meal;
     }
 
+    @Override
+    public String makeNoise() {
+        return "blob";
+    }
+
 
 }

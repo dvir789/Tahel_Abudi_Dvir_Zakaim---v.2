@@ -1,5 +1,7 @@
 package TahelAbudi_DvirZakaim;
 
+import TahelAbudi_DvirZakaim.exceptions.*;
+
 import java.util.Arrays;
 import java.util.Random;
 
@@ -16,6 +18,9 @@ public class Manager {
     private Lion[] lionsPack;
     private int lionCount;
 
+    private Tiger[] tigersPack;
+    private int tigersCount;
+
     private OrnamentalFishes[] ornamentalFishesPack;
     private int aquariumFishCount;
 
@@ -29,6 +34,7 @@ public class Manager {
         this. number = number;
 
         setLion();
+        setTiger();
         setPenguin();
         setAquariumFish();
     }
@@ -45,8 +51,12 @@ public class Manager {
     }
 
     public void createPenguin(int age, float height, String name, boolean leader) {
-        Penguins penguin = new Penguins(age, height, name, leader);
-        addPenguin(penguin);
+        try {
+            Penguins penguin = new Penguins(age, height, name, leader);
+            addPenguin(penguin);
+        } catch (GeneralException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public void addPenguin(Penguins penguin) {
@@ -114,6 +124,42 @@ public class Manager {
         return sb1.toString();
     }
 
+    // ========== TIGER ==========
+
+    private void setTiger() {
+        tigersPack = new Tiger[1];
+        tigersCount = 0;
+
+        createTiger("Mufasa", 26, 50, "male");
+        createTiger("Simba", 15, 30, "male");
+        createTiger("Nala", 15, 25, "female");
+        createTiger("Sarabi", 26, 40, "female");
+    }
+
+    public void createTiger(String name, int age, float weight, String gender) {
+        Tiger tiger = new Tiger(name, age, weight, gender);
+        addTiger(tiger);
+    }
+
+    private void addTiger(Tiger tiger) {
+        if (tigersCount >= tigersPack.length) {
+            tigersPack = Arrays.copyOf(tigersPack, tigersPack.length * 2);
+        }
+        tigersPack[tigersCount++] = tiger;
+    }
+
+    public String getTigerList() {
+        StringBuilder sb1 = new StringBuilder();
+
+        for (int i = 0; i < tigersCount - 1; i++) {
+            sb1.append(tigersPack[i].toString());
+            sb1.append(",\n");
+        }
+        sb1.append(tigersPack[tigersCount - 1].toString());
+
+        return sb1.toString();
+    }
+
     // ========== AQUARIUM FISH ==========
 
     private void setAquariumFish() {
@@ -155,6 +201,7 @@ public class Manager {
     public String getAquariumFishList() {
         StringBuilder sb = new StringBuilder();
         String[] uniqueColors = new String[1];
+        numOfUniqueColors = 0;
 
         for (int i = 0; i < aquariumFishCount - 1; i++) {
             sb.append(ornamentalFishesPack[i].toString());
@@ -180,9 +227,12 @@ public class Manager {
         if (Arrays.toString(uniqueColors).toLowerCase().contains(color.toLowerCase())) {
             return uniqueColors;
         }
+
         if (numOfUniqueColors >= uniqueColors.length) {
-            uniqueColors = Arrays.copyOf(uniqueColors, uniqueColors.length * 2);
+            uniqueColors = Arrays.copyOf(uniqueColors, uniqueColors.length * 2);     // AKRISH LOOK HERE
+
         }
+
         uniqueColors[numOfUniqueColors++] = color;
         return uniqueColors;
     }
@@ -247,33 +297,19 @@ public class Manager {
 
     //---------- LION INPUT VALIDATION ----------
 
-    public boolean isValidLionName(String name) {
-        return Lion.isValidName(name);
+    public void isValidPredatorWeight(float weight) throws PredatorWeightException {
+        Lion.isValidLionWeight(weight);
     }
 
-    public boolean isValidLionAge(int age) {
-        return Lion.isValidLionAge(age);
-    }
-
-    public boolean isValidLionWeight(float weight) {
-        return Lion.isValidLionWeight(weight);
-    }
-
-    public boolean isValidLionGender(String gender) {
-        return Lion.isValidGender(gender);
+    public void isValidLionGender(String gender) throws LionGenderException {
+        Lion.isValidGender(gender);
     }
 
     //---------- penguin input validation ----------
 
-    public boolean isValidPenguinName(String name) {
-        return Penguins.isValidName(name);
+    // the leader is always at the first place of the Penguin's Array
+    public void isValidPenguinHeight(float height) throws PenguinHeightException {
+        penguinsPack[0].isValidPenguinHeight(height);
     }
 
-    public boolean isValidPenguinAge(int age) {
-        return Penguins.isValidPenguinAge(age);
-    }
-
-    public boolean isValidPenguinHeight(float height, boolean leader) {
-        return Penguins.isValidPenguinHeight(height, leader);
-    }
 }

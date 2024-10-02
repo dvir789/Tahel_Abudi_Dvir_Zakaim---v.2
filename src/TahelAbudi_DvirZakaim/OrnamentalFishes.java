@@ -86,6 +86,11 @@ public class OrnamentalFishes extends AquariumFish {
     }
 
     @Override
+    public String makeNoise() {
+        return "blob";
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Fish at age: ").append(age).append(", length: ").append(length).append(", colors: ")
