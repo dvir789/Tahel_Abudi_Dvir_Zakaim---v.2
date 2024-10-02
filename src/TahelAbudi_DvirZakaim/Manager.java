@@ -25,7 +25,6 @@ public class Manager {
     private AquariumFish[] AquariumFishPack;
     private int AquariumFishCount;
 
-
     private int numOfUniqueColors;
 
     //constructor
@@ -171,7 +170,8 @@ public class Manager {
 
     private void addRandomFish(int amount) {
         Random r = new Random();
-        int age, patternSize = OrnamentalFishes.patternArr.length, colorSize = OrnamentalFishes.colorsArr.length, typeSize = AquariumFish.Type.length;
+        int age, patternSize = OrnamentalFishes.patternArr.length,
+                colorSize = OrnamentalFishes.colorsArr.length, typeSize = AquariumFish.Type.length;
         String[] fishColor;
         String fishPattern;
         String fishType;

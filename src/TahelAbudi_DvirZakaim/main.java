@@ -2,7 +2,6 @@
 
 package TahelAbudi_DvirZakaim;
 
-
 import TahelAbudi_DvirZakaim.exceptions.AgeException;
 import TahelAbudi_DvirZakaim.exceptions.GeneralException;
 import TahelAbudi_DvirZakaim.exceptions.NameException;
@@ -160,7 +159,7 @@ public class main {
 
     private static void addAquariumFish(Manager manager) {
 
-        String type = readString("Choose fish's type (Gold Fish/ Clown Fish/ Ornamental Fish): ");
+        String type = readString("Choose the fish's type (Gold Fish/ Clown Fish/ Ornamental Fish): ");
         while (!manager.isValidFishType(type)) {
             type = readString("wrong input, enter correct type: ");
         }
