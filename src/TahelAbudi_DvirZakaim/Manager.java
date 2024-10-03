@@ -2,6 +2,8 @@ package TahelAbudi_DvirZakaim;
 
 import TahelAbudi_DvirZakaim.exceptions.*;
 
+import java.awt.*;
+import java.util.*;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,10 +19,6 @@ public class Manager {
     private Animal[] animalsPack;
     private int animalsCount;
 
-    private OrnamentalFishes[] ornamentalFishesPack;
-    private int aquariumFishCount;
-
-    private int numOfUniqueColors;
 
     //constructor
     public Manager(String name, String city, String street, String number) {
@@ -171,78 +169,136 @@ public class Manager {
     // ========== AQUARIUM FISH ==========
 
     private void setAquariumFish() {
-        ornamentalFishesPack = new OrnamentalFishes[1];
+//        AquariumFishPack = new AquariumFish[1];
         addRandomFish(10);
+    }
+
+    public Map<String, String[]> getFishColors() {
+        Map<String, String[]> colorsArray = new HashMap<>();
+
+        colorsArray.put("gold fish", GoldFish.availableColors);
+        colorsArray.put("clown fish", ClownFish.availableColors);
+        colorsArray.put("ornamental fish", AquariumFish.colorsArr);
+
+        return colorsArray;
+    }
+
+    public Map<String, String[]> getFishPattern() {
+        Map<String, String[]> patternArray = new HashMap<>();
+
+        patternArray.put("gold fish", GoldFish.validPattern);
+        patternArray.put("clown fish", ClownFish.validPattern);
+        patternArray.put("ornamental fish", AquariumFish.patternArr);
+
+        return patternArray;
     }
 
     private void addRandomFish(int amount) {
         Random r = new Random();
-        int age, patternSize = OrnamentalFishes.patternArr.length, colorSize = OrnamentalFishes.colorsArr.length;
+        Map<String, String[]> colorsArray = getFishColors();
+        Map<String, String[]> patternArray = getFishPattern();
+        int age, typeSize = AquariumFish.Type.length;
         String[] fishColor;
         String fishPattern;
+        String fishType;
         float length;
-        int colorRandomNumber, patternRandomNumber;
+        int colorRandomNumber, patternRandomNumber, typeRandomNumber;
 
         for (int i = 0; i < amount; i++) {
             age = r.nextInt(15) + 1;
             length = r.nextFloat(10) + 1;
-            colorRandomNumber = r.nextInt(colorSize);
-            fishColor = new String[]{OrnamentalFishes.colorsArr[colorRandomNumber]};
-            patternRandomNumber = r.nextInt(patternSize);
-            fishPattern = OrnamentalFishes.patternArr[patternRandomNumber];
-            createFish(age, fishColor, length, fishPattern);
+            typeRandomNumber = r.nextInt(typeSize);
+            fishType = AquariumFish.Type[typeRandomNumber].toLowerCase();
+
+            colorRandomNumber = r.nextInt(colorsArray.get(fishType).length);
+            fishColor = new String[]{colorsArray.get(fishType)[colorRandomNumber]};
+
+            patternRandomNumber = r.nextInt(patternArray.get(fishType).length);
+            fishPattern = patternArray.get(fishType)[patternRandomNumber];
+
+            try {
+                createFish(age, length, fishType, fishColor, fishPattern);
+            } catch (GeneralException e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 
-    public void createFish(int age, String[] userColors, float length, String userPattern) {
-        OrnamentalFishes fish = new OrnamentalFishes(age, length, userColors, userPattern);
-        addFish(fish);
-    }
-
-    private void addFish(OrnamentalFishes fish) {
-        if (aquariumFishCount >= ornamentalFishesPack.length) {
-            ornamentalFishesPack = Arrays.copyOf(ornamentalFishesPack, ornamentalFishesPack.length * 2);
+    public void createFish(int age, float length, String type, String[] colors, String pattern) throws GeneralException{
+        AquariumFish fish = switch (type.toLowerCase()) {
+            case "gold fish" -> new GoldFish(age, length, colors, pattern);
+            case "clown fish" -> new ClownFish(age, length, colors, pattern);
+            case "ornamental fish" -> new OrnamentalFish(age, length, colors, pattern);
+            default -> null;
+        };
+        if (fish != null) {
+            addAnimal(fish);
         }
-        ornamentalFishesPack[aquariumFishCount++] = fish;
     }
 
     public String getAquariumFishList() {
         StringBuilder sb = new StringBuilder();
-        String[] uniqueColors = new String[1];
-        numOfUniqueColors = 0;
+        Map<String, Integer> colorsCount = getFishColorsCount();
+        String[] uniqueColors = getUniqueColors(colorsCount);
+        AquariumFish[] fishArray = getFishArray();
 
-        for (int i = 0; i < aquariumFishCount - 1; i++) {
-            sb.append(ornamentalFishesPack[i].toString());
+        for (int i = 0; i < fishArray.length - 1; i++) {
+            sb.append(fishArray[i].toString());
             sb.append(",\n");
         }
-        sb.append(ornamentalFishesPack[aquariumFishCount - 1].toString());
-        sb.append("\nThere are ").append(aquariumFishCount).append(" fishes in the aquarium\n");
-
-        for (int i = 0; i < aquariumFishCount; i++) {
-            String[] fishColors = ornamentalFishesPack[i].getColors();
-            for (String color : fishColors) {
-                uniqueColors = isUniqueColor(uniqueColors, color);
-            }
+        sb.append(fishArray[fishArray.length - 1].toString());
+        sb.append("\nThere are ").append(fishArray.length).append(" fishes in the aquarium\n");
+        sb.append("The most frequent color is: ").append(uniqueColors[0]);
+        if (uniqueColors[1] != null) {
+            sb.append("\nThe second most frequent color is: ").append(uniqueColors[1]);
         }
-
-        uniqueColors = Arrays.copyOf(uniqueColors, numOfUniqueColors);
-        sb.append(Arrays.toString(uniqueColors));
-
         return sb.toString();
     }
 
-    public String[] isUniqueColor(String[] uniqueColors, String color) {
-        if (Arrays.toString(uniqueColors).toLowerCase().contains(color.toLowerCase())) {
-            return uniqueColors;
+    private String[] getUniqueColors(Map<String, Integer> colorsCount) {
+        String[] uniqueColors = new String[2];
+
+        int max1 = 0;
+
+        for (String key : colorsCount.keySet()) {
+            int value = colorsCount.get(key);
+            if (value >= max1) {
+                uniqueColors[1] = uniqueColors[0];
+                max1 = value;
+                uniqueColors[0] = key;
+            }
         }
-
-        if (numOfUniqueColors >= uniqueColors.length) {
-            uniqueColors = Arrays.copyOf(uniqueColors, uniqueColors.length * 2);     // AKRISH LOOK HERE
-
-        }
-
-        uniqueColors[numOfUniqueColors++] = color;
         return uniqueColors;
+    }
+
+    private Map<String, Integer> getFishColorsCount() {
+        Map<String, Integer> fishColorsCount = new HashMap<>();
+
+        for (int i = 0; i < animalsCount; i++) {
+            if (animalsPack[i] instanceof AquariumFish fish) {
+                String[] fishColors = fish.getColors();
+                for (String color : fishColors) {
+                    if (fishColorsCount.containsKey(color)) {
+                        fishColorsCount.compute(color, (k, v) -> (v == null) ? 1 : v + 1);
+                    } else {
+                        fishColorsCount.put(color, 1);
+                    }
+                }
+            }
+        }
+        return fishColorsCount;
+    }
+
+    private AquariumFish[] getFishArray() {
+        AquariumFish[] fishArray = new AquariumFish[animalsCount];
+        int fishCount = 0;
+
+        for (int i = 0; i < animalsCount; i++) {
+            if (animalsPack[i] instanceof AquariumFish) {
+                fishArray[fishCount++] = (AquariumFish) animalsPack[i];
+            }
+        }
+        return Arrays.copyOf(fishArray, fishCount);
     }
 
     private Map<String, Float> getAnimalFeed() {
@@ -264,7 +320,6 @@ public class Manager {
         Map<String, Float> zooFeed = getAnimalFeed();
 
         StringBuilder sb = new StringBuilder();
-
         sb.append("The lions ate: ").append(zooFeed.get("Lion")).append(" kg of meat\n");
         sb.append("The Tigers ate: ").append(zooFeed.get("Tiger")).append(" kg of meat\n");
         sb.append("The penguins ate: ").append(zooFeed.get("Penguins")).append(" fishes");
@@ -303,23 +358,34 @@ public class Manager {
     //---------- FISH INPUT VALIDATION ----------
 
     public boolean isValidFishAge(int age) {
-        return OrnamentalFishes.isValidAge(age);
+        return AquariumFish.isValidAge(age);
     }
 
-    public boolean isValidFishColor(String userColor) {
-        return OrnamentalFishes.isValidColor(userColor);
+    public void validateFishColor(String type, String userColor) throws ColorException {
+        switch (type) {
+            case "gold fish" -> {
+                GoldFish.validateColor(userColor);
+            }
+            case "clown fish" -> {
+                ClownFish.validateColor(userColor);
+            }
+            case "ornamental fish" -> {
+                AquariumFish.validateColor(userColor);
+            }
+        }
     }
+
 
     public boolean isValidFishLength(float length) {
-        return OrnamentalFishes.isValidLength(length);
+        return AquariumFish.isValidLength(length);
     }
 
     public boolean isValidFishPattern(String userPattern) {
-        return OrnamentalFishes.isValidPattern(userPattern);
+        return AquariumFish.isValidPattern(userPattern);
     }
 
-    public boolean canAddFishColor(int numOfUserColors) {
-        return numOfUserColors < OrnamentalFishes.colorsArr.length;
+    public boolean isValidFishType(String userType) {
+        return AquariumFish.isValidType(userType);
     }
 
     //---------- LION INPUT VALIDATION ----------

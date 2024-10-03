@@ -1,21 +1,24 @@
 package TahelAbudi_DvirZakaim;
 
+import TahelAbudi_DvirZakaim.exceptions.*;
+
 import java.util.Arrays;
 
 public class ClownFish extends AquariumFish {
 
-    private final String[] availableColors = {"BLACK", "WHITE", "ORANGE"};
-    private final String validPattern = "STRIPES";
-    public final String type = "ClownFish";
-    public final float Meal = 2;
+    public static final String[] availableColors = {"BLACK", "WHITE", "ORANGE"};
+    public final float Meal = 1;
+    public final String fishType = "ClownFish";
+    public static final String[] validPattern = {"STRIPES"};
 
 
-    public ClownFish(int age, float length, String[] colors, String pattern) {
+    public ClownFish(int age, float length, String[] colors, String pattern) throws GeneralException {
         super(age, length, colors, pattern);
-        super.type = type;
+        validateColor();
+        this.type = fishType;
     }
 
-    private boolean isValidColor(String[] colors) {
+    private boolean isColorValid(String[] colors) {
         for (String color : colors) {
             if (!Arrays.toString(availableColors).contains(color)) {
                 return false;
@@ -24,16 +27,22 @@ public class ClownFish extends AquariumFish {
         return true;
     }
 
-    private void validateColor() throws Exception {
-        if (!isValidColor(colors)) {
-            throw new Exception("Color not valid");
+    public static void validateColor(String color) throws ColorException {
+        if (!Arrays.toString(availableColors).contains(color)) {
+            throw new ColorException();
         }
     }
 
-    @Override
-    public float MealCalculator() {
-        return Meal;
+    private void validateColor() throws GeneralException {
+        if (!isColorValid(colors)) {
+            throw new GeneralException("Color not valid, choose from the list: " + Arrays.toString(availableColors));
+        }
     }
+
+//    @Override
+//    public boolean areColorsValid() {
+//        return false;
+//    }
 
     @Override
     public String makeNoise() {
@@ -42,8 +51,6 @@ public class ClownFish extends AquariumFish {
 
     @Override
     public float mealCalculate() {
-        return 2;
+        return Meal;
     }
-
-
 }
