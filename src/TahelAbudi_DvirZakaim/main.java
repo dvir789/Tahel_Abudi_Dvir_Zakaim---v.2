@@ -3,10 +3,12 @@
 package TahelAbudi_DvirZakaim;
 
 import TahelAbudi_DvirZakaim.exceptions.AgeException;
+import TahelAbudi_DvirZakaim.exceptions.ColorException;
 import TahelAbudi_DvirZakaim.exceptions.GeneralException;
 import TahelAbudi_DvirZakaim.exceptions.NameException;
 
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -173,27 +175,25 @@ public class main {
                 float length = readFloat("Enter fish's length: ");
                 manager.isValidFishLength(length);
 
+                String[] fishColors = manager.getFishColors().get(type);
                 String userColor = readString("choose fish's color from the list: \n"
-                        + Arrays.toString(OrnamentalFish.colorsArr));
+                        + Arrays.toString(fishColors)).toUpperCase();
 
-                String[] userColors = new String[OrnamentalFish.colorsArr.length];
+                String[] userColors = new String[fishColors.length];
                 int numOfUserColors = 0;
-                while (!manager.isValidFishColor(userColor)) {
-                    userColor = readString("wrong color, please enter valid color from this list above: ");
-                }
-                userColors[numOfUserColors++] = userColor;
+                manager.validateFishColor(type, userColor);
+                userColors[numOfUserColors++] = userColor.toUpperCase();
 
                 String answer = readString("do you want another color? (y/n): ");
-                while (Objects.equals(answer, "y") && manager.canAddFishColor(numOfUserColors)) {
-                    userColor = readString("Enter another color from the list: ");
-                    while (!manager.isValidFishColor(userColor)) {
-                        userColor = readString("wrong color, please enter valid color from this list above: ");
-                    }
+                while (Objects.equals(answer, "y") && numOfUserColors < userColors.length) {
+                    userColor = readString("Enter another color from the list: ").toUpperCase();
+                    manager.validateFishColor(type, userColor);
                     userColors[numOfUserColors++] = userColor;
                     answer = readString("do you want another color? (y/n): ");
                 }
 
-                String userPattern = readString("Enter fish's pattern: \n" + Arrays.toString(OrnamentalFish.patternArr));
+                String[] fishPattern = manager.getFishPattern().get(type);
+                String userPattern = readString("Enter fish's pattern: \n" + Arrays.toString(fishPattern));
                 while (!manager.isValidFishPattern(userPattern)) {
                     userPattern = readString("invalid pattern, please choose from the list above ");
                 }
@@ -201,7 +201,11 @@ public class main {
                 userColors = Arrays.copyOf(userColors, numOfUserColors);
                 manager.createFish(age, length, type, userColors, userPattern);
                 return;
-            } catch (GeneralException e) {
+            }
+            catch (ColorException e){
+                System.out.println(e.getMessage());
+            }
+            catch (GeneralException e) {
                 System.out.println(e.getMessage());;
             }
         }

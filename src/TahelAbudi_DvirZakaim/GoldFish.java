@@ -14,7 +14,7 @@ public class GoldFish extends AquariumFish {
 
     public GoldFish(int age, float length, String[] colors, String pattern) throws GeneralException{
         super(age, length, colors, pattern);
-        validateColor(colors);
+        validateColors(colors);
         this.type = fishType;
     }
 
@@ -27,7 +27,13 @@ public class GoldFish extends AquariumFish {
         return true;
     }
 
-    private void validateColor(String[] colors) throws GeneralException {
+    public static void validateColor(String color) throws ColorException {
+        if (!Arrays.toString(availableColors).contains(color)) {
+            throw new ColorException();
+        }
+    }
+
+    private void validateColors(String[] colors) throws GeneralException {
         if (!isColorValid(colors)) {
             throw new GeneralException("Color not valid, choose from the list: " + Arrays.toString(availableColors));
         }

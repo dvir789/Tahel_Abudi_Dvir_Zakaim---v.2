@@ -65,9 +65,10 @@ public abstract class AquariumFish extends Animal{
         return true;
     }
 
-    public static boolean isValidColor(String fishColor) {
-        fishColor = fishColor.toLowerCase();
-        return Arrays.toString(colorsArr).toLowerCase().contains(fishColor);
+    public static void validateColor(String color) throws ColorException {
+        if (!Arrays.toString(colorsArr).contains(color)) {
+            throw new ColorException();
+        }
     }
 
     public void setPattern(String pattern) throws PatternException {
@@ -88,7 +89,7 @@ public abstract class AquariumFish extends Animal{
     }
 
     public String[] getColors() {
-        return Arrays.copyOf(colors, numOfColors);
+        return colors;
     }
 
     public String getType() {
