@@ -1,20 +1,22 @@
 package TahelAbudi_DvirZakaim;
 
+import TahelAbudi_DvirZakaim.exceptions.*;
+
 import java.util.Arrays;
 
 public class GoldFish extends AquariumFish {
 
-    private final String[] availableColors = {"BLACK", "YELLOW", "GOLD", "ORANGE"};
-    private final String validPattern = "PLAIN";
+    public static final String[] availableColors = {"BLACK", "YELLOW", "GOLD", "ORANGE"};
+    public static final String[] validPattern = {"PLAIN"};
 
     public final String fishType = "GoldFish";
     public final float Meal = 1;
 
-    public GoldFish(int age, float length, String[] colors, String pattern) {
+    public GoldFish(int age, float length, String[] colors, String pattern) throws GeneralException{
         super(age, length, colors, pattern);
+        validateColor(colors);
         this.type = fishType;
     }
-
 
     private boolean isColorValid(String[] colors) {
         for (String color : colors) {
@@ -24,9 +26,10 @@ public class GoldFish extends AquariumFish {
         }
         return true;
     }
-    private void validateColor() throws Exception {
+
+    private void validateColor(String[] colors) throws GeneralException {
         if (!isColorValid(colors)) {
-            throw new Exception("Color not valid");
+            throw new GeneralException("Color not valid, choose from the list: " + Arrays.toString(availableColors));
         }
     }
 
@@ -34,6 +37,11 @@ public class GoldFish extends AquariumFish {
     public float MealCalculator() {
         return Meal;
     }
+
+//    @Override
+//    public boolean areColorsValid() {
+//        return false;
+//    }
 
     @Override
     public String makeNoise() {
