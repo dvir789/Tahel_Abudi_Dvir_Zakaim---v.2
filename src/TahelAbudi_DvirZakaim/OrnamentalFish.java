@@ -31,7 +31,7 @@ public class OrnamentalFish extends AquariumFish {
 //    }
 
     @Override
-    public float MealCalculator() {
+    public float mealCalculate() {
         return age < Meal ? Meal : (Meal + length);
     }
 

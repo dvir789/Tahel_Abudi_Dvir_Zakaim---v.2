@@ -18,7 +18,6 @@ public abstract class AquariumFish extends Animal{
     protected String[] colors;
     public int numOfColors;
     protected String pattern;
-    public abstract float MealCalculator();
 
 
     public AquariumFish(int age, float length, String[] colors, String pattern) throws GeneralException {

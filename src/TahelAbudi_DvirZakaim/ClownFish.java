@@ -33,11 +33,6 @@ public class ClownFish extends AquariumFish {
         }
     }
 
-    @Override
-    public float MealCalculator() {
-        return Meal;
-    }
-
 //    @Override
 //    public boolean areColorsValid() {
 //        return false;
@@ -46,5 +41,10 @@ public class ClownFish extends AquariumFish {
     @Override
     public String makeNoise() {
         return "blob";
+    }
+
+    @Override
+    public float mealCalculate() {
+        return Meal;
     }
 }

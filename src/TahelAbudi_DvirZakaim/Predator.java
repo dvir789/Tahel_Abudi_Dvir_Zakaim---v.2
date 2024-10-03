@@ -15,8 +15,6 @@ public abstract class Predator extends Animal {
         this.gender = gender;
     }
 
-    public abstract float mealCalculate();
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

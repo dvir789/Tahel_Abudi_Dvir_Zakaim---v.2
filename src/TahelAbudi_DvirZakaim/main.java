@@ -22,7 +22,8 @@ public class main {
             "Show Predators",
             "Show Aquarium fish",
             "Feed animals",
-            "Listen to animals"
+            "Listen to animals",
+            "show all zoo animals array"
     };
 
     public static void main(String[] args) {
@@ -46,6 +47,7 @@ public class main {
                 case 7 -> showAquariumFish(manager);
                 case 8 -> feedAnimals(manager);
                 case 9 -> listenAnimals(manager);
+                case 10 -> System.out.println(manager.getAnimalsList());
                 default -> System.out.println("invalid value");
             }
 
@@ -82,7 +84,8 @@ public class main {
                 isValidAge(age);
 
                 float height = readFloat("Enter penguin's height: ");
-                manager.isValidPenguinHeight(height);
+                boolean isLeader = false;
+                manager.isValidPenguinHeight(height, isLeader);
 
                 manager.createPenguin(age, height, name, false);
 
