@@ -6,17 +6,19 @@ import TahelAbudi_DvirZakaim.exceptions.GeneralException;
 import TahelAbudi_DvirZakaim.exceptions.NameException;
 import TahelAbudi_DvirZakaim.exceptions.PenguinHeightException;
 
-public class Penguins extends Animal {
+import java.util.Objects;
+
+public class Penguins extends Animal{
 
     private int age;
     private float height;
     private String name;
-    public final static int leaderHeight = 200;
+    public final static float leaderHeight = 200;
 
     //constructor
     public Penguins(int age, float height, String name, boolean leader) throws GeneralException {
         setAge(age);
-        setHeight(height);
+        setHeight(height, leader);
         setName(name);
     }
 
@@ -34,15 +36,16 @@ public class Penguins extends Animal {
         this.name = name;
     }
 
-    public void setHeight(float height) throws PenguinHeightException {
-        if (!isValidPenguinHeight(height)) {
+    public void setHeight(float height, boolean isLeader) throws PenguinHeightException {
+        if (!isValidPenguinHeight(height, isLeader)) {
             throw  new PenguinHeightException();
         }
         this.height = height;
     }
 
-    public boolean isValidPenguinHeight(float height) throws PenguinHeightException {
-        if (height <= 0 || height >= leaderHeight) {
+    // if leader - check for height higher then 0, else check for validation
+    public static boolean isValidPenguinHeight(float height, boolean isLeader) throws PenguinHeightException {
+        if (height <= 0 || (height >= leaderHeight) && !isLeader) {
             throw new PenguinHeightException();
         }
         return true;
@@ -62,4 +65,8 @@ public class Penguins extends Animal {
         return sb.toString();
     }
 
+    @Override
+    public float mealCalculate() {
+        return 1;
+    }
 }

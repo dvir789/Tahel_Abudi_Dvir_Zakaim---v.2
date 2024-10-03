@@ -91,6 +91,11 @@ public class OrnamentalFishes extends AquariumFish {
     }
 
     @Override
+    public float mealCalculate() {
+        return age < Meal ? Meal : (Meal + length);
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Fish at age: ").append(age).append(", length: ").append(length).append(", colors: ")
