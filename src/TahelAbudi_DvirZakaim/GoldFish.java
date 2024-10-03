@@ -41,5 +41,10 @@ public class GoldFish extends AquariumFish {
         return "blob";
     }
 
+    @Override
+    public float mealCalculate() {
+        return 1;
+    }
+
 
 }

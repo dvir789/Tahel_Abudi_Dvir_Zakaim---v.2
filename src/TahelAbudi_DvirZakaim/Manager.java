@@ -3,6 +3,8 @@ package TahelAbudi_DvirZakaim;
 import TahelAbudi_DvirZakaim.exceptions.*;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class Manager {
@@ -12,14 +14,8 @@ public class Manager {
     private final String street;
     private final String number;
 
-    private Penguins[] penguinsPack;
-    private int penguinsCount;
-
-    private Lion[] lionsPack;
-    private int lionCount;
-
-    private Tiger[] tigersPack;
-    private int tigersCount;
+    private Animal[] animalsPack;
+    private int animalsCount;
 
     private OrnamentalFishes[] ornamentalFishesPack;
     private int aquariumFishCount;
@@ -33,17 +29,42 @@ public class Manager {
         this.street = street;
         this. number = number;
 
+        setAnimalsPack();
         setLion();
         setTiger();
         setPenguin();
         setAquariumFish();
     }
 
+//     ========== Animals ==========
+
+    public void setAnimalsPack() {
+        animalsPack = new Animal[1];
+        animalsCount = 0;
+    }
+
+    public void addAnimal (Animal animal) {
+        if (animalsCount >= animalsPack.length) {
+            animalsPack = Arrays.copyOf(animalsPack, animalsPack.length * 2);
+        }
+        animalsPack[animalsCount++] = animal;
+    }
+
+    public String getAnimalsList() {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < animalsCount - 1; i++) {
+            sb.append(animalsPack[i].toString());
+            sb.append(",\n");
+        }
+        sb.append(animalsPack[animalsCount - 1].toString());
+
+        return sb.toString();
+    }
+
     // ========== PENGUIN ==========
 
     private void setPenguin() {
-        penguinsPack = new Penguins[1];
-        penguinsCount = 0;
 
         createPenguin(15, Penguins.leaderHeight, "Rossi", true); // leader
         createPenguin(12, 180, "Moss", false);
@@ -52,38 +73,43 @@ public class Manager {
 
     public void createPenguin(int age, float height, String name, boolean leader) {
         try {
-            Penguins penguin = new Penguins(age, height, name, leader);
-            addPenguin(penguin);
+            Animal penguin = new Penguins(age, height, name, leader);
+            addAnimal(penguin);
         } catch (GeneralException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public void addPenguin(Penguins penguin) {
-        if (penguinsCount >= penguinsPack.length) {
-            penguinsPack = Arrays.copyOf(penguinsPack, penguinsPack.length * 2);
-        }
-
-        int place;
-        for (place = 0; place < penguinsCount; place++) {
-            if (penguin.getHeight() > penguinsPack[place].getHeight()){
-                break;
-            }
-        }
-
-        if (penguinsCount - place >= 0) System.arraycopy(penguinsPack, place, penguinsPack, place + 1, penguinsCount - place);
-        penguinsPack[place] = penguin;
-        penguinsCount++;
-    }
-
     public String getPenguinList() {
         StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < penguinsCount - 1; i++) {
-            sb.append(penguinsPack[i].toString());
+        Penguins[] penguins = new Penguins[animalsCount];
+        int place;
+        int numOfPenguins = 0;
+
+        for (int i = 0; i < animalsCount; i++) {
+            if (animalsPack[i].getClass().getSimpleName().equals("Penguins")) {
+                Penguins penguin = (Penguins) animalsPack[i];
+
+                for (place = 0; place < numOfPenguins; place++) {
+                    if (penguin.getHeight() > penguins[place].getHeight()) {
+                        break;
+                    }
+                }
+                if (numOfPenguins - place >= 0) {
+                    System.arraycopy(penguins, place, penguins, place + 1, numOfPenguins - place);
+                }
+                penguins[place] = penguin;
+                numOfPenguins++;
+            }
+        }
+        System.out.println(numOfPenguins);
+        for (int i = 0; i < numOfPenguins - 1; i++) {
+            sb.append(penguins[i].toString());
             sb.append(",\n");
         }
-        sb.append(penguinsPack[penguinsCount - 1].toString());
+
+        sb.append(penguins[numOfPenguins - 1].toString());
 
         return sb.toString();
     }
@@ -91,8 +117,6 @@ public class Manager {
     // ========== LION ==========
 
     private void setLion() {
-        lionsPack = new Lion[1];
-        lionCount = 0;
 
         createLion("Mufasa", 26, 50, "male");
         createLion("Simba", 15, 30, "male");
@@ -101,25 +125,18 @@ public class Manager {
     }
 
     public void createLion(String name, int age, float weight, String gender) {
-        Lion lion = new Lion(name, age, weight, gender);
-        addLion(lion);
-    }
-
-    private void addLion(Lion lion) {
-        if (lionCount >= lionsPack.length) {
-            lionsPack = Arrays.copyOf(lionsPack, lionsPack.length * 2);
-        }
-        lionsPack[lionCount++] = lion;
+        Animal lion = new Lion(name, age, weight, gender);
+        addAnimal(lion);
     }
 
     public String getLionList() {
         StringBuilder sb1 = new StringBuilder();
 
-        for (int i = 0; i < lionCount - 1; i++) {
-            sb1.append(lionsPack[i].toString());
-            sb1.append(",\n");
+        for (int i = 0; i < animalsCount; i++) {
+            if (animalsPack[i].getClass().getSimpleName().equals("Lion")) {
+                sb1.append(animalsPack[i].toString()).append("\n");
+            }
         }
-        sb1.append(lionsPack[lionCount - 1].toString());
 
         return sb1.toString();
     }
@@ -127,8 +144,6 @@ public class Manager {
     // ========== TIGER ==========
 
     private void setTiger() {
-        tigersPack = new Tiger[1];
-        tigersCount = 0;
 
         createTiger("Mufasa", 26, 50, "male");
         createTiger("Simba", 15, 30, "male");
@@ -137,25 +152,18 @@ public class Manager {
     }
 
     public void createTiger(String name, int age, float weight, String gender) {
-        Tiger tiger = new Tiger(name, age, weight, gender);
-        addTiger(tiger);
-    }
-
-    private void addTiger(Tiger tiger) {
-        if (tigersCount >= tigersPack.length) {
-            tigersPack = Arrays.copyOf(tigersPack, tigersPack.length * 2);
-        }
-        tigersPack[tigersCount++] = tiger;
+        Animal tiger = new Tiger(name, age, weight, gender);
+        addAnimal(tiger);
     }
 
     public String getTigerList() {
         StringBuilder sb1 = new StringBuilder();
 
-        for (int i = 0; i < tigersCount - 1; i++) {
-            sb1.append(tigersPack[i].toString());
-            sb1.append(",\n");
+        for (int i = 0; i < animalsCount; i++) {
+            if (animalsPack[i].getClass().getSimpleName().equals("Tiger")) {
+                sb1.append(animalsPack[i].toString()).append("\n");
+            }
         }
-        sb1.append(tigersPack[tigersCount - 1].toString());
 
         return sb1.toString();
     }
@@ -237,39 +245,58 @@ public class Manager {
         return uniqueColors;
     }
 
+    private Map<String, Float> getAnimalFeed() {
+        Map<String, Float> zooFeed = new HashMap<>();
+
+        for (int i = 0; i < animalsCount; i++) {
+            String animalType = animalsPack[i].getClass().getSimpleName();
+            float mealCalculator = animalsPack[i].mealCalculate();
+            if (zooFeed.containsKey(animalType)) {
+                zooFeed.compute(animalType, (k, feed) -> (feed == null) ? mealCalculator : feed + mealCalculator);
+            } else {
+                zooFeed.put(animalType, mealCalculator);
+            }
+        }
+        return zooFeed;
+    }
+
     public String feedAllAnimals() {
-        float lionsMeals = 0, fishMeals = 0;
-        int penguinsMeal = penguinsCount;
+        Map<String, Float> zooFeed = getAnimalFeed();
+
         StringBuilder sb = new StringBuilder();
 
-        for (Lion lion: lionsPack) {
-            if (lion == null){
-                break;
-            }
-            lionsMeals += lion.mealCalculate();
-        }
-
-        for (OrnamentalFishes fish : ornamentalFishesPack) {
-            if (fish == null) {
-                break;
-            }
-            fishMeals += fish.MealCalculator();
-        }
-
-        sb.append("The lions ate: ").append(lionsMeals).append(" kg of meat\n");
-        sb.append("The fishes ate: ").append(fishMeals).append(" meals\n");
-        sb.append("The penguins ate: ").append(penguinsMeal).append(" fishes");
+        sb.append("The lions ate: ").append(zooFeed.get("Lion")).append(" kg of meat\n");
+        sb.append("The Tigers ate: ").append(zooFeed.get("Tiger")).append(" kg of meat\n");
+        sb.append("The penguins ate: ").append(zooFeed.get("Penguins")).append(" fishes");
+//        sb.append("The fishes ate: ").append(fishMeals).append(" meals\n");
         return sb.toString();
+    }
+
+    private Map<String, Integer> getAnimalCount() {
+        Map<String, Integer> zooCount = new HashMap<>();
+
+        for (int i = 0; i < animalsCount; i++) {
+            String animalType = animalsPack[i].getClass().getSimpleName();
+            if (zooCount.containsKey(animalType)) {
+                zooCount.compute(animalType, (k, count) -> (count == null) ? 1 : count + 1);
+            } else {
+                zooCount.put(animalType, 1);
+            }
+        }
+        return zooCount;
     }
 
     @Override
     public String toString() {
+        Map<String, Integer> zooCount = getAnimalCount();
+
         StringBuilder sb = new StringBuilder();
         sb.append("The Zoo name is: ").append(name).append("\n");
         sb.append("The zoo address is: ").append(city).append(", ").append(number).append(", ").append(street).append("\n");
-        sb.append("Lions: ").append(lionCount).append("\n");
-        sb.append("Penguins: ").append(penguinsCount).append("\n");
-        sb.append("AquariumFish: ").append(aquariumFishCount).append("\n");
+        sb.append("Lions: ").append(zooCount.get("Lion")).append("\n");
+        sb.append("Tigers: ").append(zooCount.get("Tiger")).append("\n");
+        sb.append("Penguins: ").append(zooCount.get("Penguins")).append("\n");
+        sb.append("AquariumFish: ").append(zooCount.get("AquariumFish")).append("\n");
         return sb.toString();
     }
 
@@ -307,9 +334,8 @@ public class Manager {
 
     //---------- penguin input validation ----------
 
-    // the leader is always at the first place of the Penguin's Array
-    public void isValidPenguinHeight(float height) throws PenguinHeightException {
-        penguinsPack[0].isValidPenguinHeight(height);
+    public void isValidPenguinHeight(float height, boolean isLeader) throws PenguinHeightException {
+        Penguins.isValidPenguinHeight(height, isLeader);
     }
 
 }

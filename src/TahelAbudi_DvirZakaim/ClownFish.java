@@ -40,5 +40,10 @@ public class ClownFish extends AquariumFish {
         return "blob";
     }
 
+    @Override
+    public float mealCalculate() {
+        return 2;
+    }
+
 
 }
