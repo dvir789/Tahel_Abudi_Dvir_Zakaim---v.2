@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 public class ClownFish extends AquariumFish {
 
-    public static final String[] availableColors = {"BLACK", "WHITE", "ORANGE"};
+    public static final String[] validColors = {"BLACK", "WHITE", "ORANGE"};
     public final float Meal = 1;
     public final String fishType = "ClownFish";
     public static final String[] validPattern = {"STRIPES"};
@@ -14,35 +14,28 @@ public class ClownFish extends AquariumFish {
 
     public ClownFish(int age, float length, String[] colors, String pattern) throws GeneralException {
         super(age, length, colors, pattern);
-        validateColor();
-        this.type = fishType;
+        validateClownColors(colors);
+        validateClownPattern(pattern);
+        this.animalType = fishType;
     }
 
-    private boolean isColorValid(String[] colors) {
+    private void validateClownColors(String[] colors) throws ColorException {
         for (String color : colors) {
-            if (!Arrays.toString(availableColors).contains(color)) {
-                return false;
-            }
+            validateColor(color);
         }
-        return true;
     }
 
     public static void validateColor(String color) throws ColorException {
-        if (!Arrays.toString(availableColors).contains(color)) {
+        if (!Arrays.asList(validColors).contains(color)) {
             throw new ColorException();
         }
     }
 
-    private void validateColor() throws GeneralException {
-        if (!isColorValid(colors)) {
-            throw new GeneralException("Color not valid, choose from the list: " + Arrays.toString(availableColors));
+    private void validateClownPattern(String pattern) throws PatternException {
+        if (!Arrays.asList(validPattern).contains(pattern)) {
+            throw new PatternException();
         }
     }
-
-//    @Override
-//    public boolean areColorsValid() {
-//        return false;
-//    }
 
     @Override
     public String makeNoise() {

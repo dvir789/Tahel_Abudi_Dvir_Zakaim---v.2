@@ -1,14 +1,17 @@
 package TahelAbudi_DvirZakaim;
 
+import TahelAbudi_DvirZakaim.exceptions.AgeException;
+import TahelAbudi_DvirZakaim.exceptions.GeneralException;
+
 import java.util.Objects;
 
 public class Tiger extends Predator{
 
     private static final String type = "Tiger";
 
-    public Tiger(String name, int age, float weight, String gender) {
+    public Tiger(String name, int age, float weight, String gender) throws GeneralException {
         super(name, age, weight, gender);
-        super.type = type;
+        super.animalType = type;
     }
 
     @Override

@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 public class GoldFish extends AquariumFish {
 
-    public static final String[] availableColors = {"BLACK", "YELLOW", "GOLD", "ORANGE"};
+    public static final String[] validColors = {"BLACK", "YELLOW", "GOLD", "ORANGE"};
     public static final String[] validPattern = {"PLAIN"};
 
     public final String fishType = "GoldFish";
@@ -14,41 +14,33 @@ public class GoldFish extends AquariumFish {
 
     public GoldFish(int age, float length, String[] colors, String pattern) throws GeneralException{
         super(age, length, colors, pattern);
-        validateColors(colors);
-        this.type = fishType;
+        validateGoldFishColors(colors);
+        validateGoldPattern(pattern);
+        this.animalType = fishType;
     }
 
-    private boolean isColorValid(String[] colors) {
+    private void validateGoldFishColors(String[] colors) throws GeneralException {
         for (String color : colors) {
-            if (!Arrays.toString(availableColors).contains(color)) {
-                return false;
-            }
+            validateColor(color);
         }
-        return true;
     }
 
     public static void validateColor(String color) throws ColorException {
-        if (!Arrays.toString(availableColors).contains(color)) {
+        if (!Arrays.asList(validColors).contains(color)) {
             throw new ColorException();
         }
     }
 
-    private void validateColors(String[] colors) throws GeneralException {
-        if (!isColorValid(colors)) {
-            throw new GeneralException("Color not valid, choose from the list: " + Arrays.toString(availableColors));
+        private void validateGoldPattern(String pattern) throws PatternException {
+        if (!Arrays.asList(validPattern).contains(pattern)) {
+            throw new PatternException();
         }
     }
-
-//    @Override
-//    public boolean areColorsValid() {
-//        return false;
-//    }
 
     @Override
     public String makeNoise() {
         return "blob";
     }
-
 
     @Override
     public float mealCalculate() {
