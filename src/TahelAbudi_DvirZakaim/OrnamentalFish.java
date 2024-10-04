@@ -10,25 +10,8 @@ public class OrnamentalFish extends AquariumFish {
 
     public OrnamentalFish(int age, float length, String[] colors, String pattern) throws GeneralException {
         super(age, length, colors, pattern);
-        this.type = fishType;
+        this.animalType = fishType;
     }
-
-
-//    @Override
-//    public boolean areColorsValid() {
-//        return false;
-//    }
-
-//    public void addColor(String userColor) {
-//        if (!isValidColor(userColor)) {
-//            return;
-//        }
-
-//        if (numOfColors >= colors.length) {
-//            colors = Arrays.copyOf(colors, colors.length * 2);
-//        }
-//        colors[numOfColors++] = userColor.toUpperCase();
-//    }
 
     @Override
     public float mealCalculate() {

@@ -2,13 +2,9 @@
 
 package TahelAbudi_DvirZakaim;
 
-import TahelAbudi_DvirZakaim.exceptions.AgeException;
-import TahelAbudi_DvirZakaim.exceptions.ColorException;
 import TahelAbudi_DvirZakaim.exceptions.GeneralException;
-import TahelAbudi_DvirZakaim.exceptions.NameException;
 
 import java.util.Arrays;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -24,8 +20,7 @@ public class main {
             "Show Predators",
             "Show Aquarium fish",
             "Feed animals",
-            "Listen to animals",
-            "show all zoo animals array"
+            "Listen to animals"
     };
 
     public static void main(String[] args) {
@@ -49,14 +44,10 @@ public class main {
                 case 7 -> showAquariumFish(manager);
                 case 8 -> feedAnimals(manager);
                 case 9 -> listenAnimals(manager);
-                case 10 -> System.out.println(manager.getAnimalsList());
                 default -> System.out.println("invalid value");
             }
 
         } while (userChoosen != 0);
-    }
-
-    private static void listenAnimals(Manager manager) {
     }
 
     private static int showMenu() {
@@ -76,18 +67,16 @@ public class main {
     }
 
     private static void addPenguin(Manager manager) {
-
-        while (true){
+        while (true) {
             try {
                 String name = readString("Enter penguin's name: ");
-                isValidName(name);
+                Validation.validateName(name);
 
                 int age = readInt("Enter penguin's age: ");
-                isValidAge(age);
+                Validation.validateAge(age);
 
                 float height = readFloat("Enter penguin's height: ");
-                boolean isLeader = false;
-                manager.isValidPenguinHeight(height, isLeader);
+                manager.validatePenguinHeight(height, false);
 
                 manager.createPenguin(age, height, name, false);
 
@@ -97,9 +86,8 @@ public class main {
             }
         }
     }
-
+    // add predator menu
     private static void addPredator(Manager manager) {
-
         int userChoice;
         do {
             userChoice = readInt("enter 1 for lion, 2 for tiger, 3 to return to the menu: ");
@@ -109,24 +97,23 @@ public class main {
                 case 3 -> { }
                 default -> System.out.println("invalid value: ");
             }
-        } while (userChoice != 3);
+        } while (userChoice > 3 || userChoice < 1);
     }
 
     private static void addLion(Manager manager) {
-
         while (true) {
             try {
                 String name = readString("Enter lion's name: ");
-                isValidName(name);
+                Validation.validateName(name);
 
                 int age = readInt("Enter lion's age: ");
-                isValidAge(age);
+                Validation.validateAge(age);
 
                 float weight = readFloat("Enter lion's weight: ");
-                manager.isValidPredatorWeight(weight);
+                manager.validatePredatorWeight(weight);
 
                 String gender = readString("is lion male? (male/female): ");
-                manager.isValidLionGender(gender);
+                manager.validateLionGender(gender);
 
                 manager.createLion(name, age, weight, gender);
 
@@ -138,20 +125,19 @@ public class main {
     }
 
     private static void addTiger(Manager manager) {
-
         while (true) {
             try {
                 String name = readString("Enter tiger's name: ");
-                isValidName(name);
+                Validation.validateName(name);
 
                 int age = readInt("Enter tiger's age: ");
-                isValidAge(age);
+                Validation.validateAge(age);
 
                 float weight = readFloat("Enter tiger's weight: ");
-                manager.isValidPredatorWeight(weight);
+                manager.validatePredatorWeight(weight);
 
                 String gender = readString("is tiger male? (male/female): ");
-                manager.isValidLionGender(gender);
+                manager.validateLionGender(gender);
 
                 manager.createTiger(name, age, weight, gender);
 
@@ -163,47 +149,47 @@ public class main {
     }
 
     private static void addAquariumFish(Manager manager) {
-
         while (true){
             try {
                 String type = readString("Choose the fish's type (Gold Fish/ Clown Fish/ Ornamental Fish): ");
-                manager.isValidFishType(type);
+                manager.validateFishType(type);
 
                 int age = readInt("Enter fish's age: ");
-                isValidAge(age);
+                Validation.validateAge(age);
 
                 float length = readFloat("Enter fish's length: ");
-                manager.isValidFishLength(length);
-
+                manager.validateFishLength(length);
+                //creating a color string that contains the colors by the fish's type
                 String[] fishColors = manager.getFishColors().get(type);
+                //creating a color string for the fish that chosen by the user
                 String userColor = readString("choose fish's color from the list: \n"
-                        + Arrays.toString(fishColors)).toUpperCase();
-
+                        + Arrays.toString(fishColors)).toUpperCase().trim();
+                //validate if the color the user enters is a valid color
                 String[] userColors = new String[fishColors.length];
                 int numOfUserColors = 0;
                 manager.validateFishColor(type, userColor);
-                userColors[numOfUserColors++] = userColor.toUpperCase();
+                userColors[numOfUserColors++] = userColor.toUpperCase().trim();
 
                 String answer = readString("do you want another color? (y/n): ");
-                while (Objects.equals(answer, "y") && numOfUserColors < userColors.length) {
-                    userColor = readString("Enter another color from the list: ").toUpperCase();
+                while (Objects.equals(answer, "y")) {
+                    if ( numOfUserColors >= userColors.length) {
+                        System.out.println("Exceeded color amount");
+                        break;
+                    }
+                    userColor = readString("Enter another color from the list: ").toUpperCase().trim();
                     manager.validateFishColor(type, userColor);
                     userColors[numOfUserColors++] = userColor;
                     answer = readString("do you want another color? (y/n): ");
                 }
 
                 String[] fishPattern = manager.getFishPattern().get(type);
-                String userPattern = readString("Enter fish's pattern: \n" + Arrays.toString(fishPattern));
-                while (!manager.isValidFishPattern(userPattern)) {
-                    userPattern = readString("invalid pattern, please choose from the list above ");
-                }
+                String userPattern = readString("Enter fish's pattern: \n" + Arrays
+                        .toString(fishPattern)).toUpperCase().trim();
+                manager.validateFishPattern(userPattern);
 
                 userColors = Arrays.copyOf(userColors, numOfUserColors);
                 manager.createFish(age, length, type, userColors, userPattern);
                 return;
-            }
-            catch (ColorException e){
-                System.out.println(e.getMessage());
             }
             catch (GeneralException e) {
                 System.out.println(e.getMessage());;
@@ -220,6 +206,12 @@ public class main {
     private static void showAquariumFish(Manager manager) { System.out.println(manager.getAquariumFishList()); }
 
     private static void feedAnimals(Manager manager) {System.out.println(manager.feedAllAnimals()); }
+
+    private static void listenAnimals(Manager manager) {
+        System.out.println(manager.makeNoise());
+    }
+
+    //---------- UTILITY ----------
 
     private static String readString(String text) {
         System.out.println(text);
@@ -238,20 +230,6 @@ public class main {
         int number = s.nextInt();
         s.nextLine();
         return number;
-    }
-
-    public static boolean isValidAge(int age) throws AgeException {
-        if (age <= 0) {
-            throw new AgeException();
-        }
-        return true;
-    }
-
-    public static boolean isValidName(String name) throws NameException {
-        if (name == null || name.trim().length() < 2) {
-            throw new NameException();
-        }
-        return true;
     }
 
 }

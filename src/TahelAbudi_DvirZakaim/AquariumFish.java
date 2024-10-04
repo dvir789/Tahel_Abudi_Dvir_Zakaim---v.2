@@ -10,100 +10,74 @@ public abstract class AquariumFish extends Animal{
     public static final String[] patternArr = {"DOTS", "STRIPES", "SPOTS", "PLAIN"};
     public static final String[] Type = {"Clown Fish", "Gold Fish", "Ornamental Fish"};
 
-
-    protected int age;
-    //    protected int numOfColors;
     protected float length;
-    protected String type;
     protected String[] colors;
-    public int numOfColors;
     protected String pattern;
 
-
     public AquariumFish(int age, float length, String[] colors, String pattern) throws GeneralException {
-        setAge(age);
+        super(age);
         setLength(length);
         setColors(colors);
         setPattern(pattern);
     }
 
-    public void setAge(int age) throws AgeException {
-        if (!isValidAge(age)) {
-            throw new AgeException();
-        }
-        this.age = age;
-    }
-
-    public static boolean isValidAge(int age) {
-        return age > 0;
-    }
-
     public void setLength(float length) throws LengthException {
-        if (!isValidLength(length)) {
-            throw new LengthException();
-        }
+        validateLength(length);
         this.length = length;
     }
 
-    public static boolean isValidLength(float length) {
-        return length > 0;
+    public static void validateLength(float length) throws LengthException {
+        if (length <= 0) {
+            throw new LengthException();
+        }
     }
 
     public void setColors(String[] colors) throws ColorException {
-        if (!areColorsValid(colors)) {
-            throw new ColorException();
-        }
+        validateColors(colors);
         this.colors = colors;
     }
 
-    private boolean areColorsValid(String[] colors) {
+    private void validateColors(String[] colors) throws ColorException {
         for (String color : colors) {
-            if (!Arrays.toString(colorsArr).contains(color)) {
-                return false;
-            }
+            validateColor(color);
         }
-        return true;
     }
 
     public static void validateColor(String color) throws ColorException {
-        if (!Arrays.toString(colorsArr).contains(color)) {
+        if (!Arrays.asList(colorsArr).contains(color)) {
             throw new ColorException();
         }
     }
 
     public void setPattern(String pattern) throws PatternException {
-        if (!isValidPattern(pattern)) {
+        validatePattern(pattern);
+        this.pattern = pattern;
+    }
+
+    public static void validatePattern(String fishPattern) throws PatternException {
+        fishPattern = fishPattern.toLowerCase();
+        if(!Arrays.toString(patternArr).toLowerCase().contains(fishPattern)) {
             throw new PatternException();
         }
-        this.pattern = pattern.toUpperCase();
     }
 
-    public static boolean isValidPattern(String fishPattern) {
-        fishPattern = fishPattern.toLowerCase();
-        return (Arrays.toString(OrnamentalFish.patternArr).toLowerCase().contains(fishPattern));
-    }
-
-    public static boolean isValidType(String fishType){
+    public static void validateType(String fishType) throws TypeException {
         fishType = fishType.toLowerCase();
-        return (Arrays.toString(AquariumFish.Type).toLowerCase().contains(fishType));
+        if (!Arrays.toString(AquariumFish.Type).toLowerCase().contains(fishType)) {
+            throw new TypeException();
+        }
     }
 
     public String[] getColors() {
         return colors;
     }
 
-    public String getType() {
-        return type;
-    }
-
     public abstract String makeNoise();
-
-//    public abstract boolean areColorsValid();
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(type).append(" at age: ").append(age).append(" with length: ")
+        sb.append(animalType).append(" at age: ").append(age).append(" with length: ")
                 .append(length).append(" with colors: ").append(Arrays.toString(colors)).append(" with pattern: ").append(pattern);
         return sb.toString();
     }
