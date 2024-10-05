@@ -6,32 +6,50 @@ import java.util.Arrays;
 
 public class GoldFish extends AquariumFish {
 
-    public static final String[] validColors = {"BLACK", "YELLOW", "GOLD", "ORANGE"};
+    private static final String[] availableColors = {"BLACK", "YELLOW", "GOLD", "ORANGE"};
     public static final String[] validPattern = {"PLAIN"};
 
     public final String fishType = "GoldFish";
     public final float Meal = 1;
 
     public GoldFish(int age, float length, String[] colors, String pattern) throws GeneralException{
-        super(age, length, colors, pattern);
-        validateGoldFishColors(colors);
-        validateGoldPattern(pattern);
+        super(age, length, availableColors);
+        setColors(colors);
+        setPattern(pattern);
         this.animalType = fishType;
     }
 
-    private void validateGoldFishColors(String[] colors) throws GeneralException {
+    public void setColors(String[] colors) throws ColorException {
+        validateColors(colors);
+        this.colors = colors;
+    }
+
+    private void validateColors(String[] colors) throws ColorException {
         for (String color : colors) {
             validateColor(color);
         }
     }
 
     public static void validateColor(String color) throws ColorException {
-        if (!Arrays.asList(validColors).contains(color)) {
+        if (!Arrays.asList(availableColors).contains(color)) {
             throw new ColorException();
         }
     }
 
-        private void validateGoldPattern(String pattern) throws PatternException {
+    public static String[] getAvailableColors() {
+        return availableColors;
+    }
+
+    public void setPattern(String pattern) throws PatternException {
+        validatePattern(pattern);
+        this.pattern = pattern;
+    }
+
+    public static String[] getAvailablePattern() {
+        return validPattern;
+    }
+
+    private void validatePattern(String pattern) throws PatternException {
         if (!Arrays.asList(validPattern).contains(pattern)) {
             throw new PatternException();
         }
