@@ -160,7 +160,7 @@ public class main {
                 float length = readFloat("Enter fish's length: ");
                 manager.validateFishLength(length);
                 //creating a color string that contains the colors by the fish's type
-                String[] fishColors = manager.getFishColors().get(type);
+                String[] fishColors = manager.getFishAvailableColors(type);
                 //creating a color string for the fish that chosen by the user
                 String userColor = readString("choose fish's color from the list: \n"
                         + Arrays.toString(fishColors)).toUpperCase().trim();
@@ -182,7 +182,7 @@ public class main {
                     answer = readString("do you want another color? (y/n): ");
                 }
 
-                String[] fishPattern = manager.getFishPattern().get(type);
+                String[] fishPattern = manager.getFishPattern(type);
                 String userPattern = readString("Enter fish's pattern: \n" + Arrays
                         .toString(fishPattern)).toUpperCase().trim();
                 manager.validateFishPattern(userPattern);
