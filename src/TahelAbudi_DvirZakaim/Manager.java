@@ -116,11 +116,12 @@ public class Manager {
             System.out.println(e.getMessage());
         }
     }
-
-    public String getPenguinList() {
+    
+    // get Array of Penguins and returns a string
+    public String getPenguinList(Comparator<Penguins> comparator) {
         StringBuilder sb = new StringBuilder();
 
-        Penguins[] penguins = getSortedPenguins();
+        Penguins[] penguins = getSortedPenguinsArray(comparator);
         int numOfPenguins = penguins.length;
 
         sb.append(numOfPenguins).append("\n");
@@ -134,27 +135,25 @@ public class Manager {
         return sb.toString();
     }
 
-    private Penguins[] getSortedPenguins() {
+    //get sorted Penguins Array by comparator, if the method gets "null" it will use the Penguins compareTo method
+    private Penguins[] getSortedPenguinsArray(Comparator<Penguins> comparator) {
         Penguins[] penguins = new Penguins[animalsCount];
-        int place;
         int numOfPenguins = 0;
 
         for (int i = 0; i < animalsCount; i++) {
             if (animalsPack[i] instanceof Penguins penguin) {
 
-                for (place = 0; place < numOfPenguins; place++) {
-                    if (penguin.getHeight() > penguins[place].getHeight()) {
-                        break;
-                    }
-                }
-                if (numOfPenguins - place >= 0) {
-                    System.arraycopy(penguins, place, penguins, place + 1, numOfPenguins - place);
-                }
-                penguins[place] = penguin;
+                penguins[numOfPenguins] = penguin;
                 numOfPenguins++;
             }
         }
-        return Arrays.copyOf(penguins, numOfPenguins);
+        Penguins[] actualPenguins = Arrays.copyOf(penguins, numOfPenguins);
+        if (comparator != null) {
+            Arrays.sort(actualPenguins, comparator);
+        } else {
+            Arrays.sort(actualPenguins);
+        }
+        return actualPenguins;
     }
 
     // ========== LION ==========
@@ -172,7 +171,6 @@ public class Manager {
             addAnimal(lion);
         } catch (GeneralException e) {
             System.out.println(e.getMessage());
-            ;
         }
     }
 
