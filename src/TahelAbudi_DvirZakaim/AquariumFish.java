@@ -12,11 +12,13 @@ public abstract class AquariumFish extends Animal{
     protected float length;
     protected String[] colors;
     protected String pattern;
+    private final int happiness;
 
-    public AquariumFish(int age, float length, String[] validColors) throws GeneralException {
-        super(age);
+    public AquariumFish(int age, float length, String[] validColors, int lifeExpectancy) throws GeneralException {
+        super(age, lifeExpectancy);
         this.validColors = validColors;
         setLength(length);
+        this.happiness = 100;
     }
 
     public void setLength(float length) throws LengthException {
@@ -27,6 +29,7 @@ public abstract class AquariumFish extends Animal{
     public String[] getColors() {
         return colors;
     }
+
 
     public static void validateLength(float length) throws LengthException {
         if (length <= 0) {
@@ -49,6 +52,10 @@ public abstract class AquariumFish extends Animal{
         sb.append(animalType).append(" at age: ").append(age).append(" with length: ")
                 .append(length).append(" with colors: ").append(Arrays.toString(colors)).append(" with pattern: ").append(pattern);
         return sb.toString();
+    }
+
+    public int getHappiness() {
+        return this.happiness;
     }
 }
 

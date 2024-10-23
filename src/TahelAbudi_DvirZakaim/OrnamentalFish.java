@@ -3,6 +3,7 @@ package TahelAbudi_DvirZakaim;
 import TahelAbudi_DvirZakaim.exceptions.*;
 
 import java.util.Arrays;
+import java.util.Random;
 
 public class OrnamentalFish extends AquariumFish {
 
@@ -10,14 +11,17 @@ public class OrnamentalFish extends AquariumFish {
     private static final String[] availableColors = {"BLACK", "WHITE", "GREEN", "ORANGE", "BLUE", "YELLOW", "BROWN", "GOLD", "RED", "CYAN"};
     public final String fishType = "Ornamental fish";
     public final static int Meal = 3;
+    public static final int lifeExpectancy = 25;
+    protected int happiness;
 
 
     public OrnamentalFish(int age, float length, String[] colors, String pattern) throws GeneralException {
-        super(age, length, availableColors);
+        super(age, length, availableColors, lifeExpectancy);
         setColors(colors);
         setPattern(pattern);
         this.animalType = fishType;
     }
+
 
     public void setColors(String[] colors) throws ColorException {
         validateColors(colors);
@@ -59,6 +63,7 @@ public class OrnamentalFish extends AquariumFish {
     public float mealCalculate() {
         return age < Meal ? Meal : (Meal + length);
     }
+
 
     @Override
     public String makeNoise() {

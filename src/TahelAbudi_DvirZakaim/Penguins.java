@@ -4,6 +4,7 @@ package TahelAbudi_DvirZakaim;
 import TahelAbudi_DvirZakaim.exceptions.GeneralException;
 import TahelAbudi_DvirZakaim.exceptions.NameException;
 import TahelAbudi_DvirZakaim.exceptions.PenguinHeightException;
+import java.util.Random;
 
 public class Penguins extends Animal implements Comparable<Penguins>{
 
@@ -11,11 +12,13 @@ public class Penguins extends Animal implements Comparable<Penguins>{
     private String name;
     public final static float leaderHeight = 200;
     public final float Meal = 1;
+    public static final int lifeExpectancy = 6;
+    protected int happiness;
 
 
     //constructor
     public Penguins(int age, float height, String name, boolean leader) throws GeneralException {
-        super(age);
+        super(age, lifeExpectancy);
         setHeight(height, leader);
         setName(name);
     }
