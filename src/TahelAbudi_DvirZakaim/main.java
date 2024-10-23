@@ -197,7 +197,27 @@ public class main {
         }
     }
 
-    private static void showPenguins(Manager manager) { System.out.println(manager.getPenguinList()); }
+//    private static void showPenguins(Manager manager) { System.out.println(manager.getPenguinList()); }
+
+    private static void showPenguins(Manager manager) {
+        System.out.println("In which order would you like to watch the penguins?");
+        int userChoice;
+        do {
+            userChoice = readInt("""
+                    enter:\s
+                     1 to watch by name from A-Z,
+                     2 to watch by height (high to low),
+                     3 to watch by age (low to high),
+                     4 to return to the menu""");
+            switch (userChoice) {
+                case 1 -> System.out.println(manager.getPenguinList(new CompareByName()));
+                case 2 -> System.out.println(manager.getPenguinList(null));
+                case 3 -> System.out.println(manager.getPenguinList(new CompareByAge()));
+                case 4 -> { }
+                default -> System.out.println("invalid value: ");
+            }
+        } while (userChoice > 4 || userChoice < 1);
+    }
 
     private static void showPredators(Manager manager) {
         System.out.println(manager.getLionList() + "\n" + manager.getTigerList());

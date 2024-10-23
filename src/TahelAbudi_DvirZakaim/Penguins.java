@@ -5,7 +5,7 @@ import TahelAbudi_DvirZakaim.exceptions.GeneralException;
 import TahelAbudi_DvirZakaim.exceptions.NameException;
 import TahelAbudi_DvirZakaim.exceptions.PenguinHeightException;
 
-public class Penguins extends Animal{
+public class Penguins extends Animal implements Comparable<Penguins>{
 
     private float height;
     private String name;
@@ -39,6 +39,10 @@ public class Penguins extends Animal{
 
     public float getHeight() { return this.height; }
 
+    public String getName() {
+        return name;
+    }
+
     @Override
     public String makeNoise() {
         return "squack";
@@ -56,4 +60,11 @@ public class Penguins extends Animal{
         return sb.toString();
     }
 
+    //comparing by height (high to low)
+    @Override
+    public int compareTo(Penguins o) {
+        if (o == null)
+            return 1;
+        return (int) ((o.getHeight() - height) * 100);
+    }
 }
