@@ -5,8 +5,8 @@ import TahelAbudi_DvirZakaim.exceptions.NameException;
 
 public class Validation {
 
-    public static void validateAge(int age) throws AgeException {
-        if (age <= 0) {
+    public static void validateAge(int age, int lifeExpectancy) throws AgeException {
+        if (age <= 0 || age > lifeExpectancy) {
             throw new AgeException();
         }
     }

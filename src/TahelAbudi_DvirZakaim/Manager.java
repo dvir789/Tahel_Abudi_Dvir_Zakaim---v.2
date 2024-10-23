@@ -95,12 +95,17 @@ public class Manager {
         return sb.toString();
     }
 
+    public static void removeAnimal(Animal animal) {
+        System.out.println(animal.toString() + " has been removed from the zoo");
+    }
+
+
     // ========== PENGUIN ==========
 
     private void setPenguin() {
-        createPenguin(15, Penguins.leaderHeight, "Rossi", true); // leader
-        createPenguin(12, 180, "Moss", false);
-        createPenguin(11, 175, "Simon", false);
+        createPenguin(5, Penguins.leaderHeight, "Rossi", true); // leader
+        createPenguin(4, 180, "Moss", false);
+        createPenguin(3, 175, "Simon", false);
     }
 
     public void createPenguin(int age, float height, String name, boolean leader) {
@@ -135,8 +140,7 @@ public class Manager {
         int numOfPenguins = 0;
 
         for (int i = 0; i < animalsCount; i++) {
-            if (animalsPack[i] instanceof Penguins) {
-                Penguins penguin = (Penguins) animalsPack[i];
+            if (animalsPack[i] instanceof Penguins penguin) {
 
                 for (place = 0; place < numOfPenguins; place++) {
                     if (penguin.getHeight() > penguins[place].getHeight()) {
@@ -456,4 +460,9 @@ public class Manager {
         Penguins.validateHeight(height, isLeader);
     }
 
+    public void ageOneYear() {
+        for (int i = 0; i < animalsCount; i++) {
+            animalsPack[i].ageOneYear(this);
+        }
+    }
 }

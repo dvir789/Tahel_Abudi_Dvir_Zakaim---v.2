@@ -20,7 +20,8 @@ public class main {
             "Show Predators",
             "Show Aquarium fish",
             "Feed animals",
-            "Listen to animals"
+            "Listen to animals",
+            "Age One Year"
     };
 
     public static void main(String[] args) {
@@ -44,10 +45,15 @@ public class main {
                 case 7 -> showAquariumFish(manager);
                 case 8 -> feedAnimals(manager);
                 case 9 -> listenAnimals(manager);
+                case 10 -> ageOneYear(manager);
                 default -> System.out.println("invalid value");
             }
 
         } while (userChoosen != 0);
+    }
+
+    private static void ageOneYear(Manager manager) {
+        manager.ageOneYear();
     }
 
     private static int showMenu() {
@@ -73,7 +79,7 @@ public class main {
                 Validation.validateName(name);
 
                 int age = readInt("Enter penguin's age: ");
-                Validation.validateAge(age);
+//                Validation.validateAge(age);
 
                 float height = readFloat("Enter penguin's height: ");
                 manager.validatePenguinHeight(height, false);
@@ -107,7 +113,7 @@ public class main {
                 Validation.validateName(name);
 
                 int age = readInt("Enter lion's age: ");
-                Validation.validateAge(age);
+//                Validation.validateAge(age);
 
                 float weight = readFloat("Enter lion's weight: ");
                 manager.validatePredatorWeight(weight);
@@ -131,7 +137,7 @@ public class main {
                 Validation.validateName(name);
 
                 int age = readInt("Enter tiger's age: ");
-                Validation.validateAge(age);
+//                Validation.validateAge(age);
 
                 float weight = readFloat("Enter tiger's weight: ");
                 manager.validatePredatorWeight(weight);
@@ -155,7 +161,7 @@ public class main {
                 manager.validateFishType(type);
 
                 int age = readInt("Enter fish's age: ");
-                Validation.validateAge(age);
+//                Validation.validateAge(age);
 
                 float length = readFloat("Enter fish's length: ");
                 manager.validateFishLength(length);
