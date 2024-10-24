@@ -7,12 +7,11 @@ import java.util.Arrays;
 public class GoldFish extends AquariumFish {
 
     private static final String[] availableColors = {"BLACK", "YELLOW", "GOLD", "ORANGE"};
-    public static final String[] validPattern = {"PLAIN"};
+    private static final String[] validPattern = {"PLAIN"};
 
-    public final String fishType = "GoldFish";
-    public final float Meal = 1;
+    private final String fishType = "GoldFish";
+    private final float Meal = 1;
     public static final int lifeExpectancy = 12;
-//    protected int happiness;
 
     public GoldFish(int age, float length, String[] colors, String pattern) throws GeneralException {
         super(age, length, availableColors, lifeExpectancy);
@@ -56,7 +55,6 @@ public class GoldFish extends AquariumFish {
             throw new PatternException();
         }
     }
-
 
     @Override
     public String makeNoise() {

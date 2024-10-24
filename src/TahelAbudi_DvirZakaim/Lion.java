@@ -1,9 +1,6 @@
 package TahelAbudi_DvirZakaim;
 
-import TahelAbudi_DvirZakaim.exceptions.AgeException;
 import TahelAbudi_DvirZakaim.exceptions.GeneralException;
-import TahelAbudi_DvirZakaim.exceptions.LionGenderException;
-import TahelAbudi_DvirZakaim.exceptions.PredatorWeightException;
 
 import java.util.Objects;
 

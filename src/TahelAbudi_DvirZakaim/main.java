@@ -1,5 +1,9 @@
 //ID- Tahel Abudi 324171255, Dvir Zakaim- 207867821
-
+//==================N O T E S======================
+// In case of invalid input in the primal set of the animals (made by the zoo manager),
+// the program will print the exception message and the program will end, its designed that way
+// soo the zoo manager can go and fix the invalid inputs.
+//=================================================
 package TahelAbudi_DvirZakaim;
 
 import TahelAbudi_DvirZakaim.exceptions.GeneralException;
@@ -10,6 +14,8 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class main {
+
+    private final static String inputMismatchMessage = "invalid input, please enter a valid number";
     private static Scanner s = new Scanner(System.in);
     private final static String[] MENU = {
             "Exit Program",
@@ -26,8 +32,12 @@ public class main {
     };
 
     public static void main(String[] args) {
-        Manager manager = new Manager("Akrish's Zoo", "Jerusalem", "Shahal", "83");
-        run(manager);
+        try {
+            Manager manager = new Manager("Tahel's Zoo", "Jerusalem", "Shahal", "83");
+            run(manager);
+        } catch (GeneralException e) {
+            System.out.println(e.getMessage());
+        }
         s.close();
     }
 
@@ -62,7 +72,7 @@ public class main {
         try {
             return readInt("Enter your choice: ");
         } catch (InputMismatchException e) {
-            s.nextLine();
+            s.nextLine(); // clean buffer
             return -1;
         }
     }
@@ -73,10 +83,6 @@ public class main {
 
     private static void showZoo(Manager manager) {
         System.out.println(manager);
-    }
-
-    private static void ageOneYear(Manager manager) {
-        manager.ageOneYear();
     }
 
     private static void addPenguin(Manager manager) {
@@ -92,17 +98,15 @@ public class main {
                 manager.validatePenguinHeight(height, false);
 
                 manager.createPenguin(age, height, name, false);
-
                 return;
             } catch (GeneralException e) {
                 System.out.println(e.getMessage());
             } catch (InputMismatchException e){
                 s.nextLine();
-                System.out.println("invalid input, please enter a valid number");
+                System.out.println(inputMismatchMessage);
             }
         }
     }
-
     // add predator menu
     private static void addPredator(Manager manager) {
         int userChoice;
@@ -116,8 +120,8 @@ public class main {
                 default -> System.out.println("invalid value: ");
             }
             } catch (InputMismatchException e) {
-                s.nextLine();
-                System.out.println("invalid value: ");
+                s.nextLine(); // clean buffer
+                System.out.println(inputMismatchMessage);
                 userChoice = -1;
                 }
         } while (userChoice > 3 || userChoice < 1);
@@ -129,7 +133,7 @@ public class main {
                 String name = readString("Enter lion's name: ");
                 Validation.validateName(name);
 
-                int age = readInt("Enter lion's age (1- "+ Lion.lifeExpectancy + "):");
+                int age = readInt("Enter lion's age (1 - "+ Lion.lifeExpectancy + "):");
                 Validation.validateAge(age, Lion.lifeExpectancy);
 
                 float weight = readFloat("Enter lion's weight: ");
@@ -139,14 +143,15 @@ public class main {
                 manager.validateLionGender(gender);
 
                 manager.createLion(name, age, weight, gender);
-
                 return;
-            } catch (GeneralException e) {
+            }
+            catch (GeneralException e) {
                 System.out.println(e.getMessage());
-            }catch (InputMismatchException e){
-            s.nextLine();
-            System.out.println("invalid input, please enter a valid number");
-        }
+            }
+            catch (InputMismatchException e){
+                s.nextLine(); // clean buffer
+                System.out.println(inputMismatchMessage);
+            }
         }
     }
 
@@ -156,7 +161,7 @@ public class main {
                 String name = readString("Enter tiger's name: ");
                 Validation.validateName(name);
 
-                int age = readInt("Enter tiger's age (1- " + Tiger.lifeExpectancy + "):");
+                int age = readInt("Enter tiger's age (1 - " + Tiger.lifeExpectancy + "):");
                 Validation.validateAge(age, Tiger.lifeExpectancy);
 
                 float weight = readFloat("Enter tiger's weight: ");
@@ -166,13 +171,12 @@ public class main {
                 manager.validateLionGender(gender);
 
                 manager.createTiger(name, age, weight, gender);
-
                 return;
             } catch (GeneralException e) {
                 System.out.println(e.getMessage());
             } catch (InputMismatchException e){
                 s.nextLine();
-                System.out.println("invalid input, please enter a valid number");
+                System.out.println(inputMismatchMessage);
             }
         }
     }
@@ -224,7 +228,7 @@ public class main {
                 System.out.println(e.getMessage());;
             } catch (InputMismatchException e){
                 s.nextLine();
-                System.out.println("invalid input, please enter a valid number");
+                System.out.println(inputMismatchMessage);
             }
         }
     }
@@ -232,7 +236,7 @@ public class main {
     private static void showPenguins(Manager manager) {
         System.out.println("In which order would you like to watch the penguins?");
         int userChoice;
-        do {        
+        do {
             try {
                 userChoice = readInt("""
                         Enter:\s
@@ -246,12 +250,12 @@ public class main {
                     case 3 -> System.out.println(manager.getPenguinList(new CompareByAge()));
                     case 4 -> {
                     }
-                    default -> System.out.println("invalid value, please enter a number between 1 to 4 ");
+                    default -> System.out.println(inputMismatchMessage + " between 1 to 4");
                 }
             } catch (InputMismatchException e) {
                 s.nextLine();
                 userChoice = -1;
-                System.out.println("invalid value, please enter a number between 1 to 4 ");
+                System.out.println(inputMismatchMessage + " between 1 to 4");
             }
         } while (userChoice > 4 || userChoice < 1);
     }
@@ -262,10 +266,14 @@ public class main {
 
     private static void showAquariumFish(Manager manager) { System.out.println(manager.getAquariumFishList()); }
 
-    private static void feedAnimals(Manager manager) {System.out.println(manager.feedAllAnimals()); }
+    private static void feedAnimals(Manager manager) { System.out.println(manager.feedAllAnimals()); }
 
     private static void listenAnimals(Manager manager) {
         System.out.println(manager.makeNoise());
+    }
+
+    private static void ageOneYear(Manager manager) {
+        System.out.println(manager.ageOneYear());
     }
 
     //---------- UTILITY ----------
