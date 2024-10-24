@@ -3,7 +3,6 @@ package TahelAbudi_DvirZakaim;
 import TahelAbudi_DvirZakaim.exceptions.*;
 
 import java.util.Arrays;
-import java.util.Random;
 
 public class GoldFish extends AquariumFish {
 
@@ -13,7 +12,7 @@ public class GoldFish extends AquariumFish {
     public final String fishType = "GoldFish";
     public final float Meal = 1;
     public static final int lifeExpectancy = 12;
-    protected int happiness;
+//    protected int happiness;
 
     public GoldFish(int age, float length, String[] colors, String pattern) throws GeneralException {
         super(age, length, availableColors, lifeExpectancy);

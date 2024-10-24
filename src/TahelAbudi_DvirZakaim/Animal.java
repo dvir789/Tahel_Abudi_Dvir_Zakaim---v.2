@@ -12,9 +12,10 @@ public abstract class Animal {
     protected int lifeExpectancy;
 
     public Animal(int age, int lifeExpectancy) throws AgeException {
+        this.lifeExpectancy = lifeExpectancy;
         setAge(age);
         this.happiness = 100;
-        this.lifeExpectancy = lifeExpectancy;
+
     }
 
     public void setAge(int age) throws AgeException {
@@ -29,6 +30,7 @@ public abstract class Animal {
         this.happiness -= 15 + random.nextInt(16);
 
         if (this.age > lifeExpectancy || this.happiness <= 0) {
+            System.out.println(this);
             manager.removeAnimal(this);
         }
     }
