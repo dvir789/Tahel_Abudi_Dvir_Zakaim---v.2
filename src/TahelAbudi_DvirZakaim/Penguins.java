@@ -5,11 +5,12 @@ import TahelAbudi_DvirZakaim.exceptions.GeneralException;
 import TahelAbudi_DvirZakaim.exceptions.NameException;
 import TahelAbudi_DvirZakaim.exceptions.PenguinHeightException;
 
-public class Penguins extends Animal implements Comparable<Penguins>{
+public class Penguins extends Animal implements Comparable<Penguins>, Leaderable{
 
     private float height;
     private String name;
-    public final static float leaderHeight = 200;
+    private boolean isLeader;
+    public static float leaderHeight = 200;
     public final float Meal = 1;
     public static final int lifeExpectancy = 6;
 //    protected int happiness;
@@ -20,6 +21,7 @@ public class Penguins extends Animal implements Comparable<Penguins>{
         super(age, lifeExpectancy);
         setHeight(height, leader);
         setName(name);
+        this.isLeader = leader;
     }
 
     public void setName(String name) throws NameException {
@@ -52,13 +54,16 @@ public class Penguins extends Animal implements Comparable<Penguins>{
 
     @Override
     public float mealCalculate() {
-        return Meal;
+        return isLeader ? leaderMealAmount() * Meal : Meal;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Penguin: ").append(name).append(" at age: ").append(age).append(" with height: ").append(height);
+        if (isLeader) {
+            sb.append(leaderMessage());
+        }
         return sb.toString();
     }
 
@@ -69,4 +74,21 @@ public class Penguins extends Animal implements Comparable<Penguins>{
             return 1;
         return (int) ((o.getHeight() - height) * 100);
     }
+
+    @Override
+    public void setLeader(boolean isLeader) {
+        this.isLeader = true;
+        leaderHeight = this.height;
+    }
+
+//    @Override
+//    public void setLeader(boolean isLeader) {
+//        this.isLeader = isLeader;
+//    }
+//
+//    @Override
+//    public boolean isLeader() {
+//        return this.isLeader;
+//    }
+
 }
