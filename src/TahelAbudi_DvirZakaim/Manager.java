@@ -95,8 +95,26 @@ public class Manager {
         return sb.toString();
     }
 
-    public static void removeAnimal(Animal animal) {
-        System.out.println(animal.toString() + " has been removed from the zoo");
+    public void removeAnimal(Animal animal) {
+        Animal[] updatedAnimalPack = new Animal[animalsPack.length];
+        int index = 0;
+        for (int i = 0; i < animalsPack.length; i++) {
+            if (animalsPack[i] == animal) {
+                index = i;
+                System.out.println(animalsPack[i] + ", has been removed");
+            }
+        }
+
+        for (int i = 0; i < index; i++) {
+            updatedAnimalPack[i] = animalsPack[i];
+        }
+
+        for (int i = index + 1; i < animalsPack.length; i++) {
+            updatedAnimalPack[i - 1] = animalsPack[i];
+        }
+
+        animalsCount--;
+        System.arraycopy(updatedAnimalPack, 0, animalsPack, 0, animalsPack.length);
     }
 
 
@@ -159,10 +177,10 @@ public class Manager {
     // ========== LION ==========
 
     private void setLion() {
-        createLion("Mufasa", 26, 50, "male");
+        createLion("Mufasa", 10, 50, "male");
         createLion("Simba", 15, 30, "male");
         createLion("Nala", 15, 25, "female");
-        createLion("Sarabi", 26, 40, "female");
+        createLion("Sarabi", 9, 40, "female");
     }
 
     public void createLion(String name, int age, float weight, String gender) {
@@ -189,10 +207,10 @@ public class Manager {
     // ========== TIGER ==========
 
     private void setTiger() {
-        createTiger("Mufasa", 26, 50, "male");
-        createTiger("Simba", 15, 30, "male");
-        createTiger("Nala", 15, 25, "female");
-        createTiger("Sarabi", 26, 40, "female");
+        createTiger("Mufasa", 2, 50, "male");
+        createTiger("Simba", 1, 30, "male");
+        createTiger("Nala", 3, 25, "female");
+        createTiger("Sarabi", 5, 40, "female");
     }
 
     public void createTiger(String name, int age, float weight, String gender) {
@@ -239,7 +257,7 @@ public class Manager {
         int colorRandomNumber, patternRandomNumber, typeRandomNumber;
 
         for (int i = 0; i < amount; i++) {
-            age = r.nextInt(15) + 1;
+            age = r.nextInt(7) + 1;
             length = r.nextFloat(10) + 1;
             typeRandomNumber = r.nextInt(typeSize);
             fishType = AquariumFish.Type[typeRandomNumber].toLowerCase();
@@ -270,6 +288,21 @@ public class Manager {
             }
             case "ornamental fish" -> {
                 return OrnamentalFish.getAvailableColors();
+            }
+        }
+        throw new TypeException();
+    }
+
+    public int getFishLifeExpectancy(String type) throws TypeException {
+        switch (type) {
+            case "gold fish" -> {
+                return GoldFish.lifeExpectancy;
+            }
+            case "clown fish" -> {
+                return ClownFish.lifeExpectancy;
+            }
+            case "ornamental fish" -> {
+                return OrnamentalFish.lifeExpectancy;
             }
         }
         throw new TypeException();
@@ -434,9 +467,6 @@ public class Manager {
         AquariumFish.validateLength(length);
     }
 
-    public void validateFishPattern(String userPattern) throws PatternException {
-//        AquariumFish.validatePattern(userPattern);
-    }
 
     public void validateFishType(String userType) throws TypeException {
         AquariumFish.validateType(userType);
@@ -459,7 +489,7 @@ public class Manager {
     }
 
     public void ageOneYear() {
-        for (int i = 0; i < animalsCount; i++) {
+        for (int i = animalsCount - 1; i >= 0; i--) {
             animalsPack[i].ageOneYear(this);
         }
     }

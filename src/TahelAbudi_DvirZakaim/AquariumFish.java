@@ -12,7 +12,7 @@ public abstract class AquariumFish extends Animal{
     protected float length;
     protected String[] colors;
     protected String pattern;
-    private final int happiness;
+//    private final int happiness;
 
     public AquariumFish(int age, float length, String[] validColors, int lifeExpectancy) throws GeneralException {
         super(age, lifeExpectancy);
@@ -54,9 +54,9 @@ public abstract class AquariumFish extends Animal{
         return sb.toString();
     }
 
-    public int getHappiness() {
-        return this.happiness;
-    }
+//    public int getHappiness() {
+//        return this.happiness;
+//    }
 }
 
 
