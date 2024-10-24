@@ -11,10 +11,8 @@ public class Penguins extends Animal implements Comparable<Penguins>, Leaderable
     private String name;
     private boolean isLeader;
     public static float leaderHeight = 200;
-    public final float Meal = 1;
+    private final float Meal = 1;
     public static final int lifeExpectancy = 6;
-//    protected int happiness;
-
 
     //constructor
     public Penguins(int age, float height, String name, boolean leader) throws GeneralException {
@@ -32,6 +30,10 @@ public class Penguins extends Animal implements Comparable<Penguins>, Leaderable
     public void setHeight(float height, boolean isLeader) throws PenguinHeightException {
         validateHeight(height, isLeader);
         this.height = height;
+    }
+
+    public static void resetLeaderHeight() {
+        leaderHeight = 200;
     }
 
     // if leader - check for height higher then 0, else check for validation
@@ -76,19 +78,14 @@ public class Penguins extends Animal implements Comparable<Penguins>, Leaderable
     }
 
     @Override
-    public void setLeader(boolean isLeader) {
+    public void setLeader() {
         this.isLeader = true;
         leaderHeight = this.height;
     }
 
-//    @Override
-//    public void setLeader(boolean isLeader) {
-//        this.isLeader = isLeader;
-//    }
-//
-//    @Override
-//    public boolean isLeader() {
-//        return this.isLeader;
-//    }
+    @Override
+    public boolean isLeader() {
+        return isLeader;
+    }
 
 }

@@ -1,6 +1,5 @@
 package TahelAbudi_DvirZakaim;
 
-import TahelAbudi_DvirZakaim.exceptions.AgeException;
 import TahelAbudi_DvirZakaim.exceptions.GeneralException;
 
 import java.util.Objects;

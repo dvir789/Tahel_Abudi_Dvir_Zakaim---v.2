@@ -10,7 +10,6 @@ public abstract class Predator extends Animal {
     protected float weight;
     protected String gender;
     public static final int lifeExpectancy = 15;
-//    protected int happiness;
 
     public Predator(String name, int age, float weight, String gender) throws GeneralException {
         super(age, lifeExpectancy);

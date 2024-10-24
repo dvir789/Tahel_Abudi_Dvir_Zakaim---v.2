@@ -7,7 +7,6 @@ public class Validation {
 
     public static void validateAge(int age, int lifeExpectancy) throws AgeException {
         if (age <= 0 || age > lifeExpectancy) {
-            System.out.println(age);
             throw new AgeException();
         }
     }

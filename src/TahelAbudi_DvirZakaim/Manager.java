@@ -14,9 +14,8 @@ public class Manager {
     private Animal[] animalsPack;
     private int animalsCount;
 
-
     //constructor
-    public Manager(String name, String city, String street, String number) {
+    public Manager(String name, String city, String street, String number) throws GeneralException {
         this.name = name;
         this.city = city;
         this.street = street;
@@ -25,9 +24,8 @@ public class Manager {
         setAnimalsPack();
     }
 
-
     //     ========== Animals ==========
-    private void setAnimalsPack() {
+    private void setAnimalsPack() throws GeneralException {
         animalsPack = new Animal[1];
         animalsCount = 0;
 
@@ -58,7 +56,7 @@ public class Manager {
         return totalAmountFed;
     }
 
-    private int getAnimalCount(String type) {
+    private int getAnimalCountByType(String type) {
         int totalCount = 0;
 
         for (int i = 0; i < animalsCount; i++) {
@@ -72,6 +70,10 @@ public class Manager {
     }
 
     public String feedAllAnimals() {
+        for (int i = 0; i < animalsCount; i++) {
+            animalsPack[i].feed();
+        }
+
         StringBuilder sb = new StringBuilder();
 
         sb.append("The Lions ate: ").append(getAnimalFeed(Lion.class.getSimpleName())).append(" kg of meat\n");
@@ -88,72 +90,87 @@ public class Manager {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < animalsCount - 1; i++) {
-            sb.append(animalsPack[i].makeNoise());
-            sb.append(", ");
+            sb.append(animalsPack[i].makeNoise()).append(", ");
         }
-        sb.append(animalsPack[animalsCount - 1].makeNoise());
+        if (animalsCount > 0) {
+            sb.append(animalsPack[animalsCount - 1].makeNoise());
+        } else {
+            sb.setLength(0);
+        }
+
         return sb.toString();
     }
 
-    public void removeAnimal(Animal animal) {
+    public void removeAnimals() {
         Animal[] updatedAnimalPack = new Animal[animalsPack.length];
         int index = 0;
-        for (int i = 0; i < animalsPack.length; i++) {
-            if (animalsPack[i] == animal) {
-                index = i;
-                System.out.println(animalsPack[i] + ", has been removed");
+
+        for (int i = 0; i < animalsCount; i++) {
+            if (animalsPack[i] != null) {
+                updatedAnimalPack[index++] = animalsPack[i];
             }
         }
+        animalsCount = index;
 
-        for (int i = 0; i < index; i++) {
-            updatedAnimalPack[i] = animalsPack[i];
-        }
-
-        for (int i = index + 1; i < animalsPack.length; i++) {
-            updatedAnimalPack[i - 1] = animalsPack[i];
-        }
-
-        animalsCount--;
         System.arraycopy(updatedAnimalPack, 0, animalsPack, 0, animalsPack.length);
+        makePenguinsLeader(); // if penguins has no leader after removal, make new leader.
     }
 
+    public String ageOneYear() {
+        StringBuilder sb1 = new StringBuilder();
+        sb1.append("The animals that died:\n");
+        boolean isAnimalDied = false;
+
+        for (int i = animalsCount - 1; i >= 0; i--) {
+            if (animalsPack[i].ageOneYear()) {
+                sb1.append(animalsPack[i].toString()).append("\n");
+                animalsPack[i] = null;
+                isAnimalDied = true;
+            }
+        }
+        removeAnimals();
+        if (!isAnimalDied) {
+            sb1.setLength(0);
+        }
+
+        return sb1.toString();
+    }
 
     // ========== PENGUIN ==========
 
-    private void setPenguin() {
+    private void setPenguin() throws GeneralException {
         createPenguin(5, Penguins.leaderHeight, "Rossi", true); // leader
         createPenguin(4, 180, "Moss", false);
         createPenguin(3, 175, "Simon", false);
     }
 
-    public void createPenguin(int age, float height, String name, boolean leader) {
-        try {
-            Penguins penguin = new Penguins(age, height, name, leader);
-            addAnimal(penguin);
-        } catch (GeneralException e) {
-            System.out.println(e.getMessage());
-        }
+    public void createPenguin(int age, float height, String name, boolean leader) throws GeneralException {
+        Penguins penguin = new Penguins(age, height, name, leader);
+        addAnimal(penguin);
+        makePenguinsLeader(); // if the leader dies, make the highest penguin the leader,
+                              // if we have 0 penguins, reset the leader height
     }
-    
-    // get Array of Penguins and returns a string
+
     public String getPenguinList(Comparator<Penguins> comparator) {
         StringBuilder sb = new StringBuilder();
 
         Penguins[] penguins = getSortedPenguinsArray(comparator);
         int numOfPenguins = penguins.length;
 
-        sb.append(numOfPenguins).append("\n");
+        sb.append("Penguins: ").append(numOfPenguins).append("\n");
         for (int i = 0; i < numOfPenguins - 1; i++) {
             sb.append(penguins[i].toString());
             sb.append(",\n");
         }
 
-        sb.append(penguins[numOfPenguins - 1].toString());
+        if (numOfPenguins > 0) {
+            sb.append(penguins[numOfPenguins - 1].toString());
+        }
 
         return sb.toString();
     }
+    //get sorted Penguins Array by comparator, if the method gets "null" it will use the Penguin's compareTo method
 
-    //get sorted Penguins Array by comparator, if the method gets "null" it will use the Penguins compareTo method
     private Penguins[] getSortedPenguinsArray(Comparator<Penguins> comparator) {
         Penguins[] penguins = new Penguins[animalsCount];
         int numOfPenguins = 0;
@@ -171,25 +188,33 @@ public class Manager {
         } else {
             Arrays.sort(actualPenguins);
         }
+
         return actualPenguins;
+    }
+
+    private void makePenguinsLeader() {
+        Penguins[] penguins = getSortedPenguinsArray(null);
+        if (penguins.length > 0 ) {
+            if (!penguins[0].isLeader()) {
+                penguins[0].setLeader();
+            }
+        } else {
+            Penguins.resetLeaderHeight();
+        }
     }
 
     // ========== LION ==========
 
-    private void setLion() {
+    private void setLion() throws GeneralException {
         createLion("Mufasa", 10, 50, "male");
-        createLion("Simba", 15, 30, "male");
+        createLion("Simba", 14, 30, "male");
         createLion("Nala", 15, 25, "female");
         createLion("Sarabi", 9, 40, "female");
     }
 
-    public void createLion(String name, int age, float weight, String gender) {
-        try {
-            Lion lion = new Lion(name, age, weight, gender);
-            addAnimal(lion);
-        } catch (GeneralException e) {
-            System.out.println(e.getMessage());
-        }
+    public void createLion(String name, int age, float weight, String gender) throws GeneralException {
+        Lion lion = new Lion(name, age, weight, gender);
+        addAnimal(lion);
     }
 
     public String getLionList() {
@@ -206,21 +231,16 @@ public class Manager {
 
     // ========== TIGER ==========
 
-    private void setTiger() {
+    private void setTiger() throws GeneralException {
         createTiger("Mufasa", 2, 50, "male");
         createTiger("Simba", 1, 30, "male");
         createTiger("Nala", 3, 25, "female");
         createTiger("Sarabi", 5, 40, "female");
     }
 
-    public void createTiger(String name, int age, float weight, String gender) {
-        try {
-            Tiger tiger = new Tiger(name, age, weight, gender);
-            addAnimal(tiger);
-        } catch (GeneralException e) {
-            System.out.println(e.getMessage());
-            ;
-        }
+    public void createTiger(String name, int age, float weight, String gender) throws GeneralException {
+        Tiger tiger = new Tiger(name, age, weight, gender);
+        addAnimal(tiger);
     }
 
     public String getTigerList() {
@@ -237,15 +257,11 @@ public class Manager {
 
     // ========== AQUARIUM FISH ==========
 
-    private void setAquariumFish() {
-        try {
-            addRandomFish(10);
-        } catch (TypeException e) {
-            System.out.println(e.getMessage());;
-        }
+    private void setAquariumFish() throws GeneralException {
+        addRandomFish(10);
     }
 
-    private void addRandomFish(int amount) throws TypeException {
+    private void addRandomFish(int amount) throws GeneralException {
         Random r = new Random();
 
         int age, typeSize = AquariumFish.Type.length;
@@ -270,11 +286,7 @@ public class Manager {
             patternRandomNumber = r.nextInt(patterns.length);
             fishPattern = patterns[patternRandomNumber];
 
-            try {
-                createFish(age, length, fishType, fishColor, fishPattern);
-            } catch (GeneralException e) {
-                System.out.println(e.getMessage());
-            }
+            createFish(age, length, fishType, fishColor, fishPattern);
         }
     }
 
@@ -443,12 +455,12 @@ public class Manager {
         sb.append("The zoo address is: ").append(city).append(", ")
                 .append(number).append(", ").append(street).append("\n");
 
-        sb.append("Lions: ").append(getAnimalCount("Lion")).append("\n");
-        sb.append("Tigers: ").append(getAnimalCount("Tiger")).append("\n");
-        sb.append("Penguins: ").append(getAnimalCount("Penguins")).append("\n");
-        sb.append("Ornamental fish: ").append(getAnimalCount("OrnamentalFish")).append("\n");
-        sb.append("Gold fish: ").append(getAnimalCount("GoldFish")).append("\n");
-        sb.append("Clown fish: ").append(getAnimalCount("ClownFish")).append("\n");
+        sb.append("Lions: ").append(getAnimalCountByType("Lion")).append("\n");
+        sb.append("Tigers: ").append(getAnimalCountByType("Tiger")).append("\n");
+        sb.append("Penguins: ").append(getAnimalCountByType("Penguins")).append("\n");
+        sb.append("Ornamental fish: ").append(getAnimalCountByType("OrnamentalFish")).append("\n");
+        sb.append("Gold fish: ").append(getAnimalCountByType("GoldFish")).append("\n");
+        sb.append("Clown fish: ").append(getAnimalCountByType("ClownFish")).append("\n");
 
         return sb.toString();
     }
@@ -459,14 +471,13 @@ public class Manager {
         switch (type) {
             case "gold fish" -> GoldFish.validateColor(userColor);
             case "clown fish" -> ClownFish.validateColor(userColor);
-//            case "ornamental fish" -> OrnamentalFish.validateColor(userColor);
+            case "ornamental fish" -> OrnamentalFish.validateColor(userColor);
         }
     }
 
     public void validateFishLength(float length) throws LengthException {
         AquariumFish.validateLength(length);
     }
-
 
     public void validateFishType(String userType) throws TypeException {
         AquariumFish.validateType(userType);
@@ -486,11 +497,5 @@ public class Manager {
 
     public void validatePenguinHeight(float height, boolean isLeader) throws PenguinHeightException {
         Penguins.validateHeight(height, isLeader);
-    }
-
-    public void ageOneYear() {
-        for (int i = animalsCount - 1; i >= 0; i--) {
-            animalsPack[i].ageOneYear(this);
-        }
     }
 }
